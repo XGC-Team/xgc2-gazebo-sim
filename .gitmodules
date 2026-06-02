@@ -1,0 +1,12 @@
+[submodule "agilex"]
+	path = agilex
+	url = git@github.com:lxk36/xgc2-agilex.git
+	branch = xgc2-noetic
+[submodule "px4-sitl-112"]
+	path = px4-sitl-112
+	url = git@github.com:lxk36/xgc2-px4-sitl.git
+	branch = v1.12-noetic
+[submodule "px4-sitl-114"]
+	path = px4-sitl-114
+	url = git@github.com:lxk36/xgc2-px4-sitl.git
+	branch = v1.14-noetic
