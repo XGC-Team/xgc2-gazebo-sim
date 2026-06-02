@@ -2,7 +2,7 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 
 DOCKER_IMAGE="${DOCKER_IMAGE:-ros:noetic-ros-base-focal}"
 WORK_DIR="${WORK_DIR:-${REPO_ROOT}/.work/docker}"
@@ -82,13 +82,13 @@ docker run --rm \
       -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic \
       -DCATKIN_ENABLE_TESTING=OFF
 
-    /workspace/gazebo-sim/scripts/package_debs.sh \
+    /workspace/gazebo-sim/.xgc2/scripts/package_debs.sh \
       --install-root /workspace/work/install-root \
       --output-dir /workspace/out
 
     if [[ "${INSTALL_CHECK}" == "true" ]]; then
       apt-get install -y /workspace/out/*.deb
-      /workspace/gazebo-sim/scripts/check_installed_packages.sh
+      /workspace/gazebo-sim/.xgc2/scripts/check_installed_packages.sh
     fi
   '
 
