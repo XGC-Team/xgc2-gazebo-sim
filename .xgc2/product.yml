@@ -31,7 +31,7 @@ usage:
     roslaunch --files gazebo_session_manager gzserver_vrpn.launch world_name:=/tmp/xgc2-empty.world
     roslaunch --files gazebo_sim_vrpn_bridge gazebo_vrpn_server.launch
   notes: |
-    Full AgileX Gazebo workflows also use ros-noetic-xgc2-agilex.
+    Full Scout Gazebo Classic workflows also use ros-noetic-xgc2-gz-classic-scout.
 
 ownership:
   paths:
