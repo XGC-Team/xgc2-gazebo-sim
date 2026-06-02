@@ -56,21 +56,41 @@ docker run --rm \
       dpkg-dev \
       fakeroot \
       file \
+      gazebo11 \
       git \
+      libgazebo11-dev \
+      python3-yaml \
       rsync \
+      ros-noetic-controller-manager \
       ros-noetic-controller-manager-msgs \
       ros-noetic-gazebo-msgs \
+      ros-noetic-gazebo-plugins \
       ros-noetic-gazebo-ros \
+      ros-noetic-gazebo-ros-control \
       ros-noetic-geometry-msgs \
+      ros-noetic-joint-state-controller \
+      ros-noetic-joint-state-publisher \
+      ros-noetic-joint-state-publisher-gui \
+      ros-noetic-nav-msgs \
+      ros-noetic-robot-state-publisher \
       ros-noetic-roslaunch \
+      ros-noetic-roslint \
       ros-noetic-rosnode \
       ros-noetic-rospack \
       ros-noetic-rospy \
+      ros-noetic-rostopic \
+      ros-noetic-rviz \
+      ros-noetic-sensor-msgs \
+      ros-noetic-std-msgs \
       ros-noetic-std-srvs \
+      ros-noetic-tf \
       ros-noetic-tf2 \
       ros-noetic-tf2-ros \
+      ros-noetic-urdf \
+      ros-noetic-velocity-controllers \
       ros-noetic-vrpn \
-      ros-noetic-vrpn-client-ros
+      ros-noetic-vrpn-client-ros \
+      ros-noetic-xacro
 
     rm -rf /workspace/work/src /workspace/work/build /workspace/work/devel /workspace/work/install-root
     mkdir -p /workspace/work/src/xgc2_gazebo_sim
@@ -80,7 +100,10 @@ docker run --rm \
     source /opt/ros/noetic/setup.bash
     DESTDIR=/workspace/work/install-root catkin_make install \
       -DCMAKE_INSTALL_PREFIX=/opt/ros/noetic \
-      -DCATKIN_ENABLE_TESTING=OFF
+      -DCATKIN_ENABLE_TESTING=OFF \
+      -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_CXX_FLAGS_RELEASE="-O3 -DNDEBUG" \
+      -DCMAKE_C_FLAGS_RELEASE="-O3 -DNDEBUG"
 
     /workspace/gazebo-sim/.xgc2/scripts/package_debs.sh \
       --install-root /workspace/work/install-root \

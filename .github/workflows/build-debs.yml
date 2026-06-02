@@ -12,10 +12,48 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - arch: amd64
+          - target: gazebo-sim
+            arch: amd64
             runner: ubuntu-latest
-          - arch: arm64
+            build_script: .xgc2/scripts/build_debs_in_docker.sh
+            work_prefix: gazebo-sim
+            artifact_prefix: xgc2-gazebo-sim
+            publish_script: .xgc2/scripts/publish_apt_repo.sh
+          - target: gazebo-sim
+            arch: arm64
             runner: ubuntu-24.04-arm
+            build_script: .xgc2/scripts/build_debs_in_docker.sh
+            work_prefix: gazebo-sim
+            artifact_prefix: xgc2-gazebo-sim
+            publish_script: .xgc2/scripts/publish_apt_repo.sh
+          - target: px4-sitl-112
+            arch: amd64
+            runner: ubuntu-latest
+            build_script: px4/px4-sitl-112/.xgc2/scripts/build_runtime_deb_in_docker.sh
+            work_prefix: px4-sitl-112
+            artifact_prefix: xgc2-px4-sitl-112
+            publish_script: px4/px4-sitl-112/.xgc2/scripts/publish_apt_repo.sh
+          - target: px4-sitl-112
+            arch: arm64
+            runner: ubuntu-24.04-arm
+            build_script: px4/px4-sitl-112/.xgc2/scripts/build_runtime_deb_in_docker.sh
+            work_prefix: px4-sitl-112
+            artifact_prefix: xgc2-px4-sitl-112
+            publish_script: px4/px4-sitl-112/.xgc2/scripts/publish_apt_repo.sh
+          - target: px4-sitl-114
+            arch: amd64
+            runner: ubuntu-latest
+            build_script: px4/px4-sitl-114/.xgc2/scripts/build_runtime_deb_in_docker.sh
+            work_prefix: px4-sitl-114
+            artifact_prefix: xgc2-px4-sitl-114
+            publish_script: px4/px4-sitl-114/.xgc2/scripts/publish_apt_repo.sh
+          - target: px4-sitl-114
+            arch: arm64
+            runner: ubuntu-24.04-arm
+            build_script: px4/px4-sitl-114/.xgc2/scripts/build_runtime_deb_in_docker.sh
+            work_prefix: px4-sitl-114
+            artifact_prefix: xgc2-px4-sitl-114
+            publish_script: px4/px4-sitl-114/.xgc2/scripts/publish_apt_repo.sh
     runs-on: ${{ matrix.runner }}
     env:
       APT_REPO_HOST: ${{ secrets.APT_REPO_HOST }}
@@ -26,18 +64,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and install-check deb package in Docker
+      - name: Build and install-check deb packages in Docker
         run: |
-          .xgc2/scripts/build_debs_in_docker.sh \
-            --work-dir "$RUNNER_TEMP/gazebo-sim-${{ matrix.arch }}" \
+          ${{ matrix.build_script }} \
+            --work-dir "$RUNNER_TEMP/${{ matrix.work_prefix }}-${{ matrix.arch }}" \
             --output-dir "$GITHUB_WORKSPACE/debs"
 
       - name: Upload deb artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: xgc2-gazebo-sim-debs-${{ matrix.arch }}
+          name: ${{ matrix.artifact_prefix }}-debs-${{ matrix.arch }}
           path: debs/*.deb
 
       - name: Publish to self-hosted APT repository
         if: ${{ env.APT_REPO_HOST != '' && env.APT_REPO_PORT != '' && env.APT_REPO_SSH_KEY != '' && env.APT_REPO_KNOWN_HOSTS != '' }}
-        run: .xgc2/scripts/publish_apt_repo.sh --deb-dir debs
+        run: ${{ matrix.publish_script }} --deb-dir debs

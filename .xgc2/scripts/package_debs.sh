@@ -80,17 +80,34 @@ copy_ros_package_paths() {
   copy_path "${PREFIX_ROOT}/include/${ros_pkg}" "${dst_root}"
 }
 
+copy_libs() {
+  local dst_root="$1"
+  shift
+  local lib
+  for lib in "$@"; do
+    copy_path "${PREFIX_ROOT}/lib/${lib}.a" "${dst_root}"
+    copy_path "${PREFIX_ROOT}/lib/${lib}.so" "${dst_root}"
+  done
+}
+
 build_ros_package_deb() {
   local package="$1"
   local ros_pkg="$2"
   local depends="$3"
   local description="$4"
+  shift 4
 
   local pkg_root="${BUILD_DIR}/${package}"
   rm -rf "${pkg_root}"
   mkdir -p "${pkg_root}"
 
-  copy_ros_package_paths "${ros_pkg}" "${pkg_root}"
+  if [[ -n "${ros_pkg}" ]]; then
+    copy_ros_package_paths "${ros_pkg}" "${pkg_root}"
+  fi
+  if [[ "$#" -gt 0 ]]; then
+    copy_libs "${pkg_root}" "$@"
+  fi
+
   write_control "${pkg_root}" "${package}" "${depends}" "${description}"
   fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
 }
@@ -110,6 +127,9 @@ build_meta_deb() {
 
 manager_pkg="ros-noetic-xgc2-gazebo-sim-manager"
 vrpn_bridge_pkg="ros-noetic-xgc2-gazebo-sim-vrpn-bridge"
+scout_description_pkg="ros-noetic-xgc2-scout-description"
+scout_gazebo_pkg="ros-noetic-xgc2-scout-gazebo-sim"
+agilex_meta_pkg="ros-noetic-xgc2-agilex"
 meta_pkg="ros-noetic-xgc2-gazebo-sim"
 
 build_ros_package_deb \
@@ -124,9 +144,27 @@ build_ros_package_deb \
   "ros-noetic-rospy, ros-noetic-roslaunch, ros-noetic-rosnode, ros-noetic-gazebo-msgs, ros-noetic-gazebo-ros, ros-noetic-geometry-msgs, ros-noetic-controller-manager-msgs, ros-noetic-std-srvs, ros-noetic-vrpn-client-ros, ${vrpn_bridge_pkg} (= ${VERSION})" \
   "XGC2 Gazebo Classic session manager and WebUI tools"
 
+build_ros_package_deb \
+  "${scout_description_pkg}" \
+  "scout_description" \
+  "ros-noetic-urdf, ros-noetic-xacro, ros-noetic-joint-state-publisher, ros-noetic-joint-state-publisher-gui, ros-noetic-robot-state-publisher, ros-noetic-rviz" \
+  "XGC2 AgileX Scout robot description"
+
+build_ros_package_deb \
+  "${scout_gazebo_pkg}" \
+  "scout_gazebo_sim" \
+  "${scout_description_pkg} (= ${VERSION}), ros-noetic-roscpp, ros-noetic-geometry-msgs, ros-noetic-gazebo-msgs, ros-noetic-nav-msgs, ros-noetic-sensor-msgs, ros-noetic-std-msgs, ros-noetic-tf, ros-noetic-tf2, ros-noetic-tf2-ros, ros-noetic-controller-manager, ros-noetic-gazebo-plugins, ros-noetic-gazebo-ros, ros-noetic-gazebo-ros-control, ros-noetic-joint-state-controller, ros-noetic-joint-state-publisher, ros-noetic-robot-state-publisher, ros-noetic-rostopic, ros-noetic-rviz, ros-noetic-velocity-controllers" \
+  "XGC2 AgileX Scout Gazebo Classic simulation" \
+  libscout_gazebo
+
+build_meta_deb \
+  "${agilex_meta_pkg}" \
+  "${scout_description_pkg} (= ${VERSION}), ${scout_gazebo_pkg} (= ${VERSION})" \
+  "XGC2 AgileX aggregate package"
+
 build_meta_deb \
   "${meta_pkg}" \
-  "${manager_pkg} (= ${VERSION}), ${vrpn_bridge_pkg} (= ${VERSION})" \
-  "XGC2 Gazebo Classic session manager and VRPN bridge aggregate package"
+  "${manager_pkg} (= ${VERSION}), ${vrpn_bridge_pkg} (= ${VERSION}), ${agilex_meta_pkg} (= ${VERSION})" \
+  "XGC2 Gazebo Classic simulation aggregate package"
 
 find "${OUTPUT_DIR}" -maxdepth 1 -type f -name '*.deb' -print | sort
