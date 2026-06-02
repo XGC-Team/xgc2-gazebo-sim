@@ -2,19 +2,13 @@ schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
 kind: ros1-apt
-summary: Gazebo Classic session, VRPN, AgileX Scout, and PX4 SITL simulation packages for ROS Noetic.
+summary: Gazebo Classic session manager and Gazebo-to-VRPN bridge packages for ROS Noetic.
 
 ros:
   distro: noetic
   packages:
     - gazebo_session_manager
     - gazebo_sim_vrpn_bridge
-    - scout_description
-    - scout_gazebo_sim
-    - px4_sitl_runtime_1_12
-    - sitl_gazebo_1_12
-    - px4_sitl_runtime_1_14
-    - sitl_gazebo_1_14
 
 apt:
   distribution: focal
@@ -24,17 +18,9 @@ apt:
     - ros-noetic-xgc2-gazebo-sim
     - ros-noetic-xgc2-gazebo-sim-manager
     - ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    - ros-noetic-xgc2-agilex
-    - ros-noetic-xgc2-scout-description
-    - ros-noetic-xgc2-scout-gazebo-sim
-    - ros-noetic-xgc2-px4-sitl-1-12
-    - ros-noetic-xgc2-gz-classic-px4-1-12
-    - ros-noetic-xgc2-px4-sitl-1-14
-    - ros-noetic-xgc2-gz-classic-px4-1-14
   depends:
     - ros-noetic-xgc2-gazebo-sim-manager
     - ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    - ros-noetic-xgc2-agilex
 
 usage:
   install: |
@@ -44,11 +30,8 @@ usage:
     roslaunch --files gazebo_session_manager session_manager.launch world_name:=/tmp/xgc2-empty.world
     roslaunch --files gazebo_session_manager gzserver_vrpn.launch world_name:=/tmp/xgc2-empty.world
     roslaunch --files gazebo_sim_vrpn_bridge gazebo_vrpn_server.launch
-    roslaunch --files scout_gazebo_sim mini_gz_classic_simple.launch rviz:=false
-    roslaunch --files sitl_gazebo_1_12 iris_mavros_gazebo.launch
-    roslaunch --files sitl_gazebo_1_14 iris_mavros_gazebo.launch
   notes: |
-    PX4 v1.12 and v1.14 Gazebo packages are published from embedded packaging targets under px4/.
+    Full AgileX Gazebo workflows also use ros-noetic-xgc2-agilex.
 
 ownership:
   paths:
@@ -57,15 +40,3 @@ ownership:
     - /opt/ros/noetic/share/gazebo_sim_vrpn_bridge
     - /opt/ros/noetic/include/gazebo_sim_vrpn_bridge
     - /opt/ros/noetic/lib/gazebo_sim_vrpn_bridge
-    - /opt/ros/noetic/share/scout_description
-    - /opt/ros/noetic/share/scout_gazebo_sim
-    - /opt/ros/noetic/include/scout_gazebo_sim
-    - /opt/ros/noetic/lib/scout_gazebo_sim
-    - /opt/ros/noetic/share/px4_sitl_runtime_1_12
-    - /opt/ros/noetic/share/sitl_gazebo_1_12
-    - /opt/ros/noetic/lib/px4_sitl_runtime_1_12
-    - /opt/ros/noetic/lib/sitl_gazebo_1_12
-    - /opt/ros/noetic/share/px4_sitl_runtime_1_14
-    - /opt/ros/noetic/share/sitl_gazebo_1_14
-    - /opt/ros/noetic/lib/px4_sitl_runtime_1_14
-    - /opt/ros/noetic/lib/sitl_gazebo_1_14
