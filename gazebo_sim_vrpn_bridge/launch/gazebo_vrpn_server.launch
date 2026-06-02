@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="config" default="$(find gazebo_sim_vrpn_bridge)/config/gazebo_vrpn_server.yaml"/>
+
+    <node pkg="gazebo_sim_vrpn_bridge"
+          type="gazebo_vrpn_server_node"
+          name="gazebo_vrpn_server"
+          output="screen">
+        <rosparam file="$(arg config)" command="load"/>
+    </node>
+</launch>
