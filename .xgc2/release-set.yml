@@ -10,7 +10,7 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.0.2-1
+    version: 1.0.3-1
   gazebo_sim_manager:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
@@ -32,16 +32,16 @@ packages:
   px4_112:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.12-noetic
-    workflow: build-debs.yml
+    workflow: build-runtime
     apt: ros-noetic-xgc2-gazebo-sim-px4-1-12
     version: 1.12.3-2
   px4_114:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.14-noetic
-    workflow: build-debs.yml
+    workflow: build-runtime
     apt: ros-noetic-xgc2-gazebo-sim-px4-1-14
     version: 1.14.4-2
   fs150_sitl:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-fs150-sitl
-    version: 1.0.2-1
+    version: 1.0.3-1

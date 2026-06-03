@@ -37,14 +37,6 @@ jobs:
             repo: lxk36/xgc2-agilex
             ref: xgc2-noetic
             workflow: build-debs.yml
-          - name: px4-1-12
-            repo: lxk36/xgc2-px4-sitl
-            ref: v1.12-noetic
-            workflow: build-debs.yml
-          - name: px4-1-14
-            repo: lxk36/xgc2-px4-sitl
-            ref: v1.14-noetic
-            workflow: build-debs.yml
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.XGC2_CI_PAT }}
@@ -87,10 +79,65 @@ jobs:
 
           gh run watch "${run_id}" --repo "${{ matrix.repo }}" --exit-status --interval 30
 
+  dispatch-px4:
+    if: ${{ inputs.trigger_children }}
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+          - name: px4-1-12
+            package_branch: v1.12-noetic
+          - name: px4-1-14
+            package_branch: v1.14-noetic
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.XGC2_CI_PAT }}
+    steps:
+      - name: Validate orchestration token
+        run: |
+          set -euo pipefail
+          test -n "${GH_TOKEN}"
+
+      - name: Dispatch and wait for ${{ matrix.name }}
+        run: |
+          set -euo pipefail
+          started_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          gh workflow run build-runtime \
+            --repo lxk36/xgc2-px4-sitl \
+            --ref master \
+            -f package_branch="${{ matrix.package_branch }}"
+
+          run_id=""
+          for _ in $(seq 1 60); do
+            run_id="$(
+              gh run list \
+                --repo lxk36/xgc2-px4-sitl \
+                --workflow build-runtime \
+                --branch master \
+                --event workflow_dispatch \
+                --limit 10 \
+                --json databaseId,createdAt \
+                --jq "map(select(.createdAt >= \"${started_at}\")) | sort_by(.createdAt) | reverse | .[0].databaseId // empty"
+            )"
+            if [[ -n "${run_id}" ]]; then
+              break
+            fi
+            sleep 10
+          done
+
+          if [[ -z "${run_id}" ]]; then
+            echo "failed to find dispatched run for lxk36/xgc2-px4-sitl ${{ matrix.package_branch }}" >&2
+            exit 1
+          fi
+
+          gh run watch "${run_id}" --repo lxk36/xgc2-px4-sitl --exit-status --interval 30
+
   verify-external-apt:
     needs:
       - dispatch-children
-    if: ${{ always() && (!inputs.trigger_children || needs.dispatch-children.result == 'success') }}
+      - dispatch-px4
+    if: ${{ always() && (!inputs.trigger_children || (needs.dispatch-children.result == 'success' && needs.dispatch-px4.result == 'success')) }}
     strategy:
       fail-fast: false
       matrix:
