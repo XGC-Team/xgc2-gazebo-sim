@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-INSTALL_ROOT=""
 OUTPUT_DIR=""
 ROS_DISTRO="${ROS_DISTRO:-noetic}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+META_MODE="${GAZEBO_SIM_META_MODE:-locked}"
+RELEASE_SET="${GAZEBO_SIM_RELEASE_SET:-${REPO_ROOT}/.xgc2/release-set.yml}"
 
 product_version() {
   awk -F': *' '/^version:[[:space:]]*/ {print $2; exit}' "${REPO_ROOT}/.xgc2/product.yml"
@@ -21,7 +22,6 @@ fi
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --install-root)
-      INSTALL_ROOT="$2"
       shift 2
       ;;
     --output-dir)
@@ -35,14 +35,12 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "${INSTALL_ROOT}" || -z "${OUTPUT_DIR}" ]]; then
-  echo "--install-root and --output-dir are required" >&2
+if [[ -z "${OUTPUT_DIR}" ]]; then
+  echo "--output-dir is required" >&2
   exit 1
 fi
 
 ARCH="$(dpkg --print-architecture)"
-PREFIX="/opt/ros/${ROS_DISTRO}"
-PREFIX_ROOT="${INSTALL_ROOT}${PREFIX}"
 BUILD_DIR="$(mktemp -d)"
 
 cleanup() {
@@ -53,23 +51,16 @@ trap cleanup EXIT
 mkdir -p "${OUTPUT_DIR}"
 rm -f "${OUTPUT_DIR}"/*.deb
 
-copy_path() {
-  local src="$1"
-  local dst_root="$2"
-  if [[ -e "${src}" ]]; then
-    mkdir -p "${dst_root}$(dirname "${src#${INSTALL_ROOT}}")"
-    cp -a "${src}" "${dst_root}${src#${INSTALL_ROOT}}"
-  fi
-}
-
 write_control() {
   local pkg_root="$1"
   local package="$2"
   local depends="$3"
   local description="$4"
+  local extra_fields="${5:-}"
 
   mkdir -p "${pkg_root}/DEBIAN" "${pkg_root}/usr/share/doc/${package}"
-  cat > "${pkg_root}/DEBIAN/control" <<EOF
+  {
+    cat <<EOF
 Package: ${package}
 Version: ${VERSION}
 Section: misc
@@ -77,68 +68,87 @@ Priority: optional
 Architecture: ${ARCH}
 Maintainer: XGC2 <apt@example.com>
 Depends: ${depends}
+EOF
+    if [[ -n "${extra_fields}" ]]; then
+      printf '%s\n' "${extra_fields}"
+    fi
+    cat <<EOF
 Description: ${description}
 EOF
+  } > "${pkg_root}/DEBIAN/control"
   printf '%s package\n' "${package}" > "${pkg_root}/usr/share/doc/${package}/README"
   chmod 0755 "${pkg_root}/DEBIAN"
-}
-
-copy_ros_package_paths() {
-  local ros_pkg="$1"
-  local dst_root="$2"
-
-  copy_path "${PREFIX_ROOT}/share/${ros_pkg}" "${dst_root}"
-  copy_path "${PREFIX_ROOT}/lib/${ros_pkg}" "${dst_root}"
-  copy_path "${PREFIX_ROOT}/include/${ros_pkg}" "${dst_root}"
-}
-
-build_ros_package_deb() {
-  local package="$1"
-  local ros_pkg="$2"
-  local depends="$3"
-  local description="$4"
-
-  local pkg_root="${BUILD_DIR}/${package}"
-  rm -rf "${pkg_root}"
-  mkdir -p "${pkg_root}"
-
-  copy_ros_package_paths "${ros_pkg}" "${pkg_root}"
-  write_control "${pkg_root}" "${package}" "${depends}" "${description}"
-  fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
 }
 
 build_meta_deb() {
   local package="$1"
   local depends="$2"
   local description="$3"
+  local extra_fields="${4:-}"
 
   local pkg_root="${BUILD_DIR}/${package}"
   rm -rf "${pkg_root}"
   mkdir -p "${pkg_root}"
 
-  write_control "${pkg_root}" "${package}" "${depends}" "${description}"
+  write_control "${pkg_root}" "${package}" "${depends}" "${description}" "${extra_fields}"
   fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
 }
 
-manager_pkg="ros-noetic-xgc2-gazebo-sim-manager"
-vrpn_bridge_pkg="ros-noetic-xgc2-gazebo-sim-vrpn-bridge"
-meta_pkg="ros-noetic-xgc2-gazebo-sim"
+copy_fs150_sitl_payload() {
+  local pkg_root="$1"
+  local package_share="${pkg_root}/opt/ros/${ROS_DISTRO}/share/gazebo_sim_fs150_sitl"
+  local package_lib="${pkg_root}/opt/ros/${ROS_DISTRO}/lib/gazebo_sim_fs150_sitl"
 
-build_ros_package_deb \
-  "${vrpn_bridge_pkg}" \
-  "gazebo_sim_vrpn_bridge" \
-  "ros-noetic-roscpp, ros-noetic-gazebo-msgs, ros-noetic-geometry-msgs, ros-noetic-tf2, ros-noetic-tf2-ros, ros-noetic-vrpn" \
-  "XGC2 Gazebo Classic model pose to VRPN tracker server bridge"
+  mkdir -p "${package_share}" "${package_lib}"
 
-build_ros_package_deb \
-  "${manager_pkg}" \
-  "gazebo_session_manager" \
-  "ros-noetic-rospy, ros-noetic-roslaunch, ros-noetic-rosnode, ros-noetic-gazebo-msgs, ros-noetic-gazebo-ros, ros-noetic-geometry-msgs, ros-noetic-controller-manager-msgs, ros-noetic-std-srvs" \
-  "XGC2 Gazebo Classic session manager and WebUI tools"
+  cp "${REPO_ROOT}/fs150-sitl/package.xml" "${package_share}/"
+  cp "${REPO_ROOT}/fs150-sitl/CMakeLists.txt" "${package_share}/"
+  cp -a "${REPO_ROOT}/fs150-sitl/config" "${package_share}/"
+  cp -a "${REPO_ROOT}/fs150-sitl/launch" "${package_share}/"
+  cp -a "${REPO_ROOT}/fs150-sitl/reports" "${package_share}/"
+  cp "${REPO_ROOT}/fs150-sitl/scripts/generate_fs150_sitl_params.py" "${package_lib}/"
+  chmod 0755 "${package_lib}/generate_fs150_sitl_params.py"
+}
+
+build_fs150_sitl_deb() {
+  local package="ros-${ROS_DISTRO}-xgc2-gazebo-sim-fs150-sitl"
+  local depends="python3, ros-${ROS_DISTRO}-roslaunch, ros-${ROS_DISTRO}-mavros, ros-${ROS_DISTRO}-xgc2-gazebo-sim-px4-1-12"
+  local pkg_root="${BUILD_DIR}/${package}"
+
+  rm -rf "${pkg_root}"
+  mkdir -p "${pkg_root}"
+
+  write_control \
+    "${pkg_root}" \
+    "${package}" \
+    "${depends}" \
+    "FS150 PX4 1.12 iris SITL wrapper for XGC2 Gazebo simulation"
+
+  copy_fs150_sitl_payload "${pkg_root}"
+
+  fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
+}
+
+if [[ "${META_MODE}" == "locked" ]]; then
+  meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all"
+  meta_extra_fields="Replaces: ros-${ROS_DISTRO}-xgc2-gazebo-sim
+Conflicts: ros-${ROS_DISTRO}-xgc2-gazebo-sim"
+elif [[ "${META_MODE}" == "latest" ]]; then
+  meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all-latest"
+  meta_extra_fields=""
+else
+  echo "GAZEBO_SIM_META_MODE must be locked or latest" >&2
+  exit 1
+fi
+
+meta_depends="$("${SCRIPT_DIR}/meta_depends.sh" --mode "${META_MODE}" --release-set "${RELEASE_SET}")"
+
+build_fs150_sitl_deb
 
 build_meta_deb \
   "${meta_pkg}" \
-  "${manager_pkg} (= ${VERSION}), ${vrpn_bridge_pkg} (= ${VERSION}), ros-noetic-vrpn-client-ros" \
-  "XGC2 Gazebo Classic session manager and VRPN bridge aggregate package"
+  "${meta_depends}" \
+  "XGC2 Gazebo Classic simulation aggregate package" \
+  "${meta_extra_fields}"
 
 find "${OUTPUT_DIR}" -maxdepth 1 -type f -name '*.deb' -print | sort

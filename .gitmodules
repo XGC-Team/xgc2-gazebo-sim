@@ -10,3 +10,11 @@
 	path = px4-sitl-114
 	url = git@github.com:lxk36/xgc2-px4-sitl.git
 	branch = v1.14-noetic
+[submodule "fs150-sitl"]
+	path = fs150-sitl
+	url = git@github.com:lxk36/xgc2-fs150-sitl.git
+	branch = noetic
+[submodule "gazebo-sim-tools"]
+	path = gazebo-sim-tools
+	url = git@github.com:lxk36/xgc2-gazebo-sim-tools.git
+	branch = noetic
