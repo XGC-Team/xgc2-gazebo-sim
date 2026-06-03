@@ -95,9 +95,8 @@ build_meta_deb() {
 }
 
 if [[ "${META_MODE}" == "compatible" ]]; then
-  meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all"
-  meta_extra_fields="Replaces: ros-${ROS_DISTRO}-xgc2-gazebo-sim
-Conflicts: ros-${ROS_DISTRO}-xgc2-gazebo-sim"
+  meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim"
+  meta_extra_fields=""
 elif [[ "${META_MODE}" == "latest" ]]; then
   meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all-latest"
   meta_extra_fields=""
@@ -113,5 +112,12 @@ build_meta_deb \
   "${meta_depends}" \
   "XGC2 Gazebo Classic simulation aggregate package" \
   "${meta_extra_fields}"
+
+if [[ "${META_MODE}" == "compatible" ]]; then
+  build_meta_deb \
+    "ros-${ROS_DISTRO}-xgc2-gazebo-sim-all" \
+    "ros-${ROS_DISTRO}-xgc2-gazebo-sim" \
+    "Compatibility package for XGC2 Gazebo Classic simulation aggregate package"
+fi
 
 find "${OUTPUT_DIR}" -maxdepth 1 -type f -name '*.deb' -print | sort

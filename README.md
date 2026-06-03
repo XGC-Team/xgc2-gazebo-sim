@@ -6,12 +6,15 @@ own child product repository; this repository publishes the installable meta
 package:
 
 ```text
-ros-noetic-xgc2-gazebo-sim-all
+ros-noetic-xgc2-gazebo-sim
 ```
+
+`ros-noetic-xgc2-gazebo-sim-all` is kept as a compatibility package that
+depends on the main meta package.
 
 ## Child Packages
 
-The aggregate package depends on these child package names:
+The main aggregate package depends on these child package names:
 
 ```text
 ros-noetic-xgc2-gazebo-sim-manager
