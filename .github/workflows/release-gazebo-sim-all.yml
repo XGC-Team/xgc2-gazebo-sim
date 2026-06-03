@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
     inputs:
       meta_mode:
-        description: "locked pins release-set versions; latest emits unpinned -all-latest"
+        description: "compatible emits unpinned -all; latest emits unpinned -all-latest"
         required: true
-        default: locked
+        default: compatible
         type: choice
         options:
-          - locked
+          - compatible
           - latest
       trigger_children:
         description: "Trigger child product workflows before building the meta package"
@@ -184,7 +184,7 @@ jobs:
           fetch-depth: 2
 
       - name: Check product version bump
-        if: ${{ inputs.meta_mode == 'locked' }}
+        if: ${{ inputs.meta_mode == 'compatible' }}
         run: .xgc2/scripts/check_version_bump.sh --ci
 
       - name: Build deb packages
@@ -206,7 +206,7 @@ jobs:
   verify-final-apt:
     needs:
       - build-and-publish-meta
-    if: ${{ inputs.publish && needs.build-and-publish-meta.result == 'success' && inputs.meta_mode == 'locked' }}
+    if: ${{ inputs.publish && needs.build-and-publish-meta.result == 'success' && inputs.meta_mode == 'compatible' }}
     strategy:
       fail-fast: false
       matrix:
@@ -217,7 +217,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Wait until full locked release set is visible in APT
+      - name: Wait until full compatible release set is visible in APT
         run: |
           .xgc2/scripts/check_apt_release_set.sh \
             --release-set .xgc2/release-set.yml \

@@ -5,7 +5,7 @@ OUTPUT_DIR=""
 ROS_DISTRO="${ROS_DISTRO:-noetic}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
-META_MODE="${GAZEBO_SIM_META_MODE:-locked}"
+META_MODE="${GAZEBO_SIM_META_MODE:-compatible}"
 RELEASE_SET="${GAZEBO_SIM_RELEASE_SET:-${REPO_ROOT}/.xgc2/release-set.yml}"
 
 product_version() {
@@ -94,7 +94,7 @@ build_meta_deb() {
   fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
 }
 
-if [[ "${META_MODE}" == "locked" ]]; then
+if [[ "${META_MODE}" == "compatible" ]]; then
   meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all"
   meta_extra_fields="Replaces: ros-${ROS_DISTRO}-xgc2-gazebo-sim
 Conflicts: ros-${ROS_DISTRO}-xgc2-gazebo-sim"
@@ -102,7 +102,7 @@ elif [[ "${META_MODE}" == "latest" ]]; then
   meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all-latest"
   meta_extra_fields=""
 else
-  echo "GAZEBO_SIM_META_MODE must be locked or latest" >&2
+  echo "GAZEBO_SIM_META_MODE must be compatible or latest" >&2
   exit 1
 fi
 
