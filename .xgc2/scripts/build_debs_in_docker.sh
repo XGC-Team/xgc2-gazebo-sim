@@ -37,7 +37,7 @@ mkdir -p "${WORK_DIR}" "${OUTPUT_DIR}"
 docker pull "${DOCKER_IMAGE}"
 docker run --rm \
   -e DEBIAN_FRONTEND=noninteractive \
-  -e GAZEBO_SIM_META_MODE="${GAZEBO_SIM_META_MODE:-locked}" \
+  -e GAZEBO_SIM_META_MODE="${GAZEBO_SIM_META_MODE:-compatible}" \
   -v "${REPO_ROOT}:/workspace/gazebo-sim:ro" \
   -v "${OUTPUT_DIR}:/workspace/out" \
   "${DOCKER_IMAGE}" \
