@@ -94,41 +94,6 @@ build_meta_deb() {
   fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
 }
 
-copy_fs150_sitl_payload() {
-  local pkg_root="$1"
-  local package_share="${pkg_root}/opt/ros/${ROS_DISTRO}/share/gazebo_sim_fs150_sitl"
-  local package_lib="${pkg_root}/opt/ros/${ROS_DISTRO}/lib/gazebo_sim_fs150_sitl"
-
-  mkdir -p "${package_share}" "${package_lib}"
-
-  cp "${REPO_ROOT}/fs150-sitl/package.xml" "${package_share}/"
-  cp "${REPO_ROOT}/fs150-sitl/CMakeLists.txt" "${package_share}/"
-  cp -a "${REPO_ROOT}/fs150-sitl/config" "${package_share}/"
-  cp -a "${REPO_ROOT}/fs150-sitl/launch" "${package_share}/"
-  cp -a "${REPO_ROOT}/fs150-sitl/reports" "${package_share}/"
-  cp "${REPO_ROOT}/fs150-sitl/scripts/generate_fs150_sitl_params.py" "${package_lib}/"
-  chmod 0755 "${package_lib}/generate_fs150_sitl_params.py"
-}
-
-build_fs150_sitl_deb() {
-  local package="ros-${ROS_DISTRO}-xgc2-gazebo-sim-fs150-sitl"
-  local depends="python3, ros-${ROS_DISTRO}-roslaunch, ros-${ROS_DISTRO}-mavros, ros-${ROS_DISTRO}-xgc2-gazebo-sim-px4-1-12"
-  local pkg_root="${BUILD_DIR}/${package}"
-
-  rm -rf "${pkg_root}"
-  mkdir -p "${pkg_root}"
-
-  write_control \
-    "${pkg_root}" \
-    "${package}" \
-    "${depends}" \
-    "FS150 PX4 1.12 iris SITL wrapper for XGC2 Gazebo simulation"
-
-  copy_fs150_sitl_payload "${pkg_root}"
-
-  fakeroot dpkg-deb --build "${pkg_root}" "${OUTPUT_DIR}/${package}_${VERSION}_${ARCH}.deb" >/dev/null
-}
-
 if [[ "${META_MODE}" == "locked" ]]; then
   meta_pkg="ros-${ROS_DISTRO}-xgc2-gazebo-sim-all"
   meta_extra_fields="Replaces: ros-${ROS_DISTRO}-xgc2-gazebo-sim
@@ -142,8 +107,6 @@ else
 fi
 
 meta_depends="$("${SCRIPT_DIR}/meta_depends.sh" --mode "${META_MODE}" --release-set "${RELEASE_SET}")"
-
-build_fs150_sitl_deb
 
 build_meta_deb \
   "${meta_pkg}" \

@@ -37,6 +37,10 @@ jobs:
             repo: lxk36/xgc2-agilex
             ref: xgc2-noetic
             workflow: build-debs.yml
+          - name: fs150-sitl
+            repo: lxk36/xgc2-fs150-sitl
+            ref: noetic
+            workflow: build-debs.yml
     runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ secrets.XGC2_CI_PAT }}
