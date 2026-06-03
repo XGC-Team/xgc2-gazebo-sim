@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+.xgc2/scripts/check_version_bump.sh --staged

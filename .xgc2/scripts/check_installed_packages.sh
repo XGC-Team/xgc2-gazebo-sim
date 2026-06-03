@@ -11,8 +11,7 @@ test "$(rospack find gazebo_session_manager)" = "/opt/ros/${ROS_DISTRO}/share/ga
 test "$(rospack find gazebo_sim_vrpn_bridge)" = "/opt/ros/${ROS_DISTRO}/share/gazebo_sim_vrpn_bridge"
 
 roslaunch --files gazebo_session_manager session_manager.launch world_name:=/tmp/xgc2-empty.world >/tmp/xgc2-gazebo-session-manager-files.txt
-roslaunch --files gazebo_session_manager gzserver_vrpn.launch world_name:=/tmp/xgc2-empty.world >/tmp/xgc2-gzserver-vrpn-files.txt
-roslaunch --files gazebo_sim_vrpn_bridge gazebo_vrpn_server.launch >/tmp/xgc2-gazebo-vrpn-server-files.txt
+roslaunch --files gazebo_sim_vrpn_bridge vrpn_server.launch trackers:=iris port:=3883 publish_rate:=120.0 >/tmp/xgc2-vrpn-server-files.txt
 roslaunch --files vrpn_client_ros sample.launch >/tmp/xgc2-vrpn-client-files.txt
 
 echo "Installed package check passed"

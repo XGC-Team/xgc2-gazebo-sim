@@ -25,6 +25,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check product version bump
+        run: .xgc2/scripts/check_version_bump.sh --ci
 
       - name: Build and install-check deb package in Docker
         run: |

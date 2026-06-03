@@ -4,7 +4,19 @@ set -euo pipefail
 INSTALL_ROOT=""
 OUTPUT_DIR=""
 ROS_DISTRO="${ROS_DISTRO:-noetic}"
-VERSION="${PACKAGE_VERSION:-1.0.0-1}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
+
+product_version() {
+  awk -F': *' '/^version:[[:space:]]*/ {print $2; exit}' "${REPO_ROOT}/.xgc2/product.yml"
+}
+
+VERSION="${PACKAGE_VERSION:-$(product_version)}"
+
+if [[ -z "${VERSION}" ]]; then
+  echo "package version is missing; set PACKAGE_VERSION or .xgc2/product.yml version" >&2
+  exit 1
+fi
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -121,12 +133,12 @@ build_ros_package_deb \
 build_ros_package_deb \
   "${manager_pkg}" \
   "gazebo_session_manager" \
-  "ros-noetic-rospy, ros-noetic-roslaunch, ros-noetic-rosnode, ros-noetic-gazebo-msgs, ros-noetic-gazebo-ros, ros-noetic-geometry-msgs, ros-noetic-controller-manager-msgs, ros-noetic-std-srvs, ros-noetic-vrpn-client-ros, ${vrpn_bridge_pkg} (= ${VERSION})" \
+  "ros-noetic-rospy, ros-noetic-roslaunch, ros-noetic-rosnode, ros-noetic-gazebo-msgs, ros-noetic-gazebo-ros, ros-noetic-geometry-msgs, ros-noetic-controller-manager-msgs, ros-noetic-std-srvs" \
   "XGC2 Gazebo Classic session manager and WebUI tools"
 
 build_meta_deb \
   "${meta_pkg}" \
-  "${manager_pkg} (= ${VERSION}), ${vrpn_bridge_pkg} (= ${VERSION})" \
+  "${manager_pkg} (= ${VERSION}), ${vrpn_bridge_pkg} (= ${VERSION}), ros-noetic-vrpn-client-ros" \
   "XGC2 Gazebo Classic session manager and VRPN bridge aggregate package"
 
 find "${OUTPUT_DIR}" -maxdepth 1 -type f -name '*.deb' -print | sort

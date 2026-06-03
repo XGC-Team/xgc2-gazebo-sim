@@ -128,30 +128,33 @@ class GazeboSessionManager:
         self.notify_update()
         return "sent SIGKILL to %s" % proc.key
 
-    def start_gzserver_vrpn(self):
-        proc = self.processes.get("gzserver_vrpn")
+    def start_gzserver(self):
+        proc = self.processes.get("gzserver")
         if proc and proc.running():
             status = self.gazebo_status()
             if status["ready"]:
-                return "gzserver_vrpn is already running and ready, pid=%d" % proc.pid()
-            stale_msg = self.terminate_process("gzserver_vrpn", timeout=2.0)
+                return "gzserver is already running and ready, pid=%d" % proc.pid()
+            stale_msg = self.terminate_process("gzserver", timeout=2.0)
             self._kill_gazebo_runtime()
             return "%s; stale Gazebo runtime was not ready, restarted: %s" % (
                 stale_msg,
-                self._start_gzserver_vrpn_and_wait(),
+                self._start_gzserver_and_wait(),
             )
         self._kill_gazebo_runtime()
-        return self._start_gzserver_vrpn_and_wait()
+        return self._start_gzserver_and_wait()
 
-    def _start_gzserver_vrpn_and_wait(self):
+    def _start_gzserver_and_wait(self):
         start_msg = self.start_process(
-            "gzserver_vrpn",
+            "gzserver",
             [
                 "roslaunch",
-                "gazebo_session_manager",
-                "gzserver_vrpn.launch",
+                "gazebo_ros",
+                "empty_world.launch",
                 "world_name:=%s" % self.world_name,
-                "enable_vrpn_server:=true",
+                "use_sim_time:=true",
+                "gui:=false",
+                "headless:=false",
+                "debug:=false",
             ],
         )
         status = self._wait_for_gazebo_ready(timeout=25.0)
@@ -669,12 +672,12 @@ class GazeboSessionManager:
         if not self._service_available("/gazebo/spawn_urdf_model", timeout=0.5):
             raise RuntimeError(
                 "Gazebo is not ready: /gazebo/spawn_urdf_model is unavailable. "
-                "Click 'Start gzserver + VRPN' first and wait until it is running."
+                "Click 'Start gzserver' first and wait until it is running."
             )
         if not self._clock_available(timeout=1.0):
             raise RuntimeError(
                 "Gazebo is not publishing /clock. Use 'Kill Gazebo Session', then "
-                "start gzserver + VRPN again before adding a UGV."
+                "start gzserver again before adding a UGV."
             )
 
     def _service_available(self, service_name, timeout):
@@ -1096,8 +1099,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         z = self._float(form, "z", self.manager.default_z)
         yaw = self._float(form, "yaw", 0.0)
 
-        if action == "start_gzserver_vrpn":
-            return self.manager.start_gzserver_vrpn()
+        if action == "start_gzserver":
+            return self.manager.start_gzserver()
         if action == "start_gzclient":
             return self.manager.start_gzclient()
         if action == "stop_gzclient":
@@ -1216,7 +1219,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     <section>
       <h2>Gazebo</h2>
       <form method="post">
-        <button name="action" value="start_gzserver_vrpn">Start gzserver + VRPN</button>
+        <button name="action" value="start_gzserver">Start gzserver</button>
         <button name="action" value="start_gzclient">Start Gazebo GUI</button>
         <button name="action" value="stop_gzclient">Stop Gazebo GUI</button>
         <button name="action" value="start_rviz">Start RViz</button>

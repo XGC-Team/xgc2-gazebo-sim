@@ -9,6 +9,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <utility>
@@ -48,6 +49,7 @@ public:
     GazeboVrpnServerNode(ros::NodeHandle& nh, ros::NodeHandle& nh_private)
         : nh_(nh), nh_private_(nh_private) {
         nh_private_.param<std::string>("model_states_topic", model_states_topic_, "/gazebo/model_states");
+        nh_private_.param<std::string>("bind_address", bind_address_, "");
         nh_private_.param<int>("port", port_, 3883);
         nh_private_.param<double>("publish_rate", publish_rate_hz_, 100.0);
         nh_private_.param<double>("stale_timeout", stale_timeout_s_, 1.0);
@@ -55,9 +57,13 @@ public:
         nh_private_.param<double>("velocity_filter_cutoff", velocity_filter_cutoff_hz_, 25.0);
         nh_private_.param<double>("acceleration_filter_cutoff", acceleration_filter_cutoff_hz_, 25.0);
         nh_private_.param<double>("derivative_reset_timeout", derivative_reset_timeout_s_, 0.5);
+        nh_private_.param<std::string>("match_mode", match_mode_, "contains");
+        nh_private_.param<bool>("auto_track_known_models", auto_track_known_models_, false);
         loadConfig();
+        validateConfig();
 
-        connection_ = vrpn_create_server_connection(port_);
+        connection_ = vrpn_create_server_connection(
+            port_, nullptr, nullptr, bind_address_.empty() ? nullptr : bind_address_.c_str());
         if (connection_ == nullptr) {
             throw std::runtime_error("failed to create VRPN server connection");
         }
@@ -65,14 +71,15 @@ public:
         model_states_sub_ = nh_.subscribe(model_states_topic_, 1,
                                           &GazeboVrpnServerNode::modelStatesCallback, this);
 
-        ROS_INFO_STREAM("[GazeboVrpnServerNode] Serving recognized Gazebo models as VRPN trackers on port "
-                        << port_);
-        ROS_INFO_STREAM("[GazeboVrpnServerNode] Tracker names are inferred from Gazebo model namespaces "
-                        << "(for example ugv1 -> ugv1@127.0.0.1); scanning every "
-                        << scan_interval_s_ << " s");
-        if (!enabled_trackers_.empty()) {
-            ROS_INFO_STREAM("[GazeboVrpnServerNode] Exporting only " << enabled_trackers_.size()
-                            << " configured tracker(s)");
+        ROS_INFO_STREAM("[GazeboVrpnServerNode] Serving Gazebo models as VRPN trackers on port "
+                        << port_ << (bind_address_.empty() ? "" : " bound to " + bind_address_));
+        ROS_INFO_STREAM("[GazeboVrpnServerNode] Scan interval is " << scan_interval_s_
+                        << " s; match_mode=" << match_mode_);
+        if (!tracker_patterns_.empty()) {
+            ROS_INFO_STREAM("[GazeboVrpnServerNode] Tracker pattern count: " << tracker_patterns_.size());
+        }
+        if (!auto_track_known_models_) {
+            ROS_INFO_STREAM("[GazeboVrpnServerNode] Auto export is disabled; configure trackers or robots");
         }
     }
 
@@ -121,7 +128,7 @@ private:
         for (size_t i = 0; i < msg.name.size(); ++i) {
             const std::string& gazebo_model_name = msg.name[i];
             const std::string tracker_name = trackerNameForGazeboModel(gazebo_model_name);
-            if (tracker_name.empty() || !isTrackerEnabled(tracker_name)) {
+            if (tracker_name.empty()) {
                 continue;
             }
 
@@ -132,7 +139,7 @@ private:
 
         if (!matched_any_model) {
             ROS_WARN_THROTTLE(2.0,
-                              "[GazeboVrpnServerNode] No recognized robot models found in %s",
+                              "[GazeboVrpnServerNode] No configured tracker matched models in %s",
                               model_states_topic_.c_str());
         }
     }
@@ -448,6 +455,19 @@ private:
                isNumberedNamespace(value, "tello");
     }
 
+    bool matchesPattern(const std::string& model_name, const std::string& pattern) const {
+        if (pattern.empty()) {
+            return false;
+        }
+        if (match_mode_ == "exact") {
+            return model_name == pattern;
+        }
+        if (match_mode_ == "prefix") {
+            return startsWith(model_name, pattern);
+        }
+        return model_name.find(pattern) != std::string::npos;
+    }
+
     std::string trackerNameForGazeboModel(const std::string& gazebo_model_name) const {
         const std::string name = trimSlashes(gazebo_model_name);
         if (name.empty()) {
@@ -457,6 +477,16 @@ private:
         const auto configured = configured_model_to_tracker_.find(name);
         if (configured != configured_model_to_tracker_.end()) {
             return configured->second;
+        }
+
+        for (const std::string& pattern : tracker_patterns_) {
+            if (matchesPattern(name, pattern)) {
+                return pattern;
+            }
+        }
+
+        if (!auto_track_known_models_) {
+            return {};
         }
 
         if (isSupportedNamespace(name)) {
@@ -487,14 +517,6 @@ private:
         return {};
     }
 
-    bool isTrackerEnabled(const std::string& tracker_name) const {
-        const auto config = robot_configs_.find(tracker_name);
-        if (config != robot_configs_.end() && !config->second.enabled) {
-            return false;
-        }
-        return enabled_trackers_.empty() || enabled_trackers_.count(tracker_name) > 0;
-    }
-
     tf2::Transform bodyToTrackerFor(const std::string& tracker_name) const {
         const auto config = robot_configs_.find(tracker_name);
         if (config != robot_configs_.end()) {
@@ -512,9 +534,14 @@ private:
     void loadConfig() {
         default_body_to_tracker_.setIdentity();
 
+        XmlRpc::XmlRpcValue trackers;
+        if (nh_private_.getParam("trackers", trackers)) {
+            tracker_patterns_ = parseStringList(trackers, "trackers");
+        }
+
         XmlRpc::XmlRpcValue enabled_trackers;
-        if (nh_private_.getParam("enabled_trackers", enabled_trackers)) {
-            enabled_trackers_ = parseStringSet(enabled_trackers, "enabled_trackers");
+        if (tracker_patterns_.empty() && nh_private_.getParam("enabled_trackers", enabled_trackers)) {
+            tracker_patterns_ = parseStringList(enabled_trackers, "enabled_trackers");
         }
 
         XmlRpc::XmlRpcValue default_transform;
@@ -542,6 +569,10 @@ private:
             if (value.hasMember("enabled")) {
                 config.enabled = static_cast<bool>(value["enabled"]);
             }
+            if (!config.enabled) {
+                robot_configs_[tracker_name] = config;
+                continue;
+            }
             if (value.hasMember("gazebo_model_name")) {
                 config.gazebo_model_name = static_cast<std::string>(value["gazebo_model_name"]);
                 configured_model_to_tracker_[trimSlashes(config.gazebo_model_name)] = tracker_name;
@@ -554,9 +585,13 @@ private:
         }
     }
 
-    static std::set<std::string> parseStringSet(XmlRpc::XmlRpcValue& value,
-                                                const std::string& param_name) {
-        std::set<std::string> result;
+    static std::vector<std::string> parseStringList(XmlRpc::XmlRpcValue& value,
+                                                    const std::string& param_name) {
+        std::vector<std::string> result;
+        std::set<std::string> seen;
+        if (value.getType() == XmlRpc::XmlRpcValue::TypeString) {
+            return splitTrackerString(static_cast<std::string>(value));
+        }
         if (value.getType() != XmlRpc::XmlRpcValue::TypeArray) {
             throw std::runtime_error(param_name + " must be a YAML list");
         }
@@ -564,9 +599,47 @@ private:
             if (value[i].getType() != XmlRpc::XmlRpcValue::TypeString) {
                 throw std::runtime_error(param_name + " entries must be strings");
             }
-            result.insert(trimSlashes(static_cast<std::string>(value[i])));
+            const std::string item = trimSlashes(static_cast<std::string>(value[i]));
+            if (!item.empty() && seen.insert(item).second) {
+                result.push_back(item);
+            }
         }
         return result;
+    }
+
+    static std::vector<std::string> splitTrackerString(const std::string& value) {
+        std::vector<std::string> result;
+        std::set<std::string> seen;
+        std::string normalized;
+        normalized.reserve(value.size());
+        for (char ch : value) {
+            normalized.push_back((ch == ',' || ch == ';') ? ' ' : ch);
+        }
+
+        std::istringstream stream(normalized);
+        std::string item;
+        while (stream >> item) {
+            item = trimSlashes(item);
+            if (!item.empty() && seen.insert(item).second) {
+                result.push_back(item);
+            }
+        }
+        return result;
+    }
+
+    void validateConfig() const {
+        if (match_mode_ != "contains" && match_mode_ != "exact" && match_mode_ != "prefix") {
+            throw std::runtime_error("match_mode must be one of: contains, exact, prefix");
+        }
+        if (publish_rate_hz_ <= 0.0) {
+            throw std::runtime_error("publish_rate must be positive");
+        }
+        if (scan_interval_s_ <= 0.0) {
+            throw std::runtime_error("scan_interval must be positive");
+        }
+        if (port_ <= 0 || port_ > 65535) {
+            throw std::runtime_error("port must be in range 1..65535");
+        }
     }
 
     static tf2::Transform parseTransform(XmlRpc::XmlRpcValue& value,
@@ -654,6 +727,7 @@ private:
     ros::Subscriber model_states_sub_;
 
     std::string model_states_topic_;
+    std::string bind_address_;
     int port_{3883};
     double publish_rate_hz_{100.0};
     double stale_timeout_s_{1.0};
@@ -661,11 +735,13 @@ private:
     double velocity_filter_cutoff_hz_{25.0};
     double acceleration_filter_cutoff_hz_{25.0};
     double derivative_reset_timeout_s_{0.5};
+    std::string match_mode_{"contains"};
+    bool auto_track_known_models_{false};
     ros::WallTime last_scan_wall_time_;
 
     vrpn_Connection* connection_{nullptr};
     tf2::Transform default_body_to_tracker_;
-    std::set<std::string> enabled_trackers_;
+    std::vector<std::string> tracker_patterns_;
     std::map<std::string, RobotConfig> robot_configs_;
     std::map<std::string, std::string> configured_model_to_tracker_;
     std::map<std::string, TrackedModel> tracked_models_;

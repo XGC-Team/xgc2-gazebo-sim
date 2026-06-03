@@ -1,0 +1,46 @@
+# Gazebo-backed VRPN server defaults. Launch arguments can override these
+# top-level values; use this file mainly for robot-specific SE3 offsets.
+
+model_states_topic: /gazebo/model_states
+bind_address: ""
+port: 3883
+publish_rate: 120.0
+scan_interval: 2.0
+stale_timeout: 1.0
+velocity_filter_cutoff: 25.0
+acceleration_filter_cutoff: 25.0
+derivative_reset_timeout: 0.5
+match_mode: contains
+auto_track_known_models: false
+
+# Tracker patterns are matched against Gazebo model names only during low-rate
+# scans. With match_mode=contains, "iris" maps the Gazebo model "iris" to the
+# VRPN tracker "iris". Use robots below for a different tracker name.
+trackers: []
+
+# Fixed transform from Gazebo model/body frame B to simulated mocap rigid-body
+# frame M. The server publishes T_world_mocap = T_world_body * T_body_mocap.
+# Use meters and radians.
+default_body_to_tracker:
+  xyz: [0.0, 0.0, 0.0]
+  rpy: [0.0, 0.0, 0.0]
+
+# Optional per-tracker overrides. The key is the VRPN rigid body name.
+# gazebo_model_name is optional. Use it to map a Gazebo model such as "iris"
+# to a physical-system tracker name such as "uav1".
+robots: {}
+# Example PX4 SITL mapping:
+# robots:
+#   uav1:
+#     enabled: true
+#     gazebo_model_name: iris
+#     body_to_tracker:
+#       xyz: [0.0, 0.0, 0.0]
+#       rpy: [0.0, 0.0, 0.0]
+# Example marker offset:
+#   ugv2:
+#     enabled: true
+#     gazebo_model_name: ugv2
+#     body_to_tracker:
+#       xyz: [0.12, 0.0, 0.18]
+#       rpy: [0.0, 0.0, 0.0]
