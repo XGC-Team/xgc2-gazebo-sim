@@ -28,6 +28,7 @@ fi
 
 packages=(
   ros-noetic-xgc2-gazebo-sim-manager
+  ros-noetic-xgc2-gazebo-sim-examples
   ros-noetic-xgc2-gazebo-sim-vrpn-bridge
   ros-noetic-xgc2-gazebo-sim-scout
   ros-noetic-xgc2-gazebo-sim-px4-1-12
