@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.0.20-1
+version: 1.0.21-1
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 
@@ -32,7 +32,7 @@ usage:
     sudo apt install ros-noetic-xgc2-gazebo-sim
   smoke_test: |
     dpkg -s ros-noetic-xgc2-gazebo-sim
-    roslaunch --files gazebo_sim_examples fs150_ugv_vrpn.launch
+    roslaunch --files gazebo_sim_examples fs150_ugv_vrpn_stack.launch
     roslaunch --files gazebo_sim_scout simple.launch rviz:=false
     roslaunch --files gazebo_sim_px4_1_12 iris.launch gui:=false
     roslaunch --files gazebo_sim_px4_1_14 iris.launch gui:=false
