@@ -18,3 +18,7 @@
 	path = gazebo-sim-tools
 	url = git@github.com:lxk36/xgc2-gazebo-sim-tools.git
 	branch = noetic
+[submodule "cerlab-uav-sim"]
+	path = cerlab-uav-sim
+	url = git@github.com:lxk36/xgc2-cerlab-uav-sim.git
+	branch = noetic
