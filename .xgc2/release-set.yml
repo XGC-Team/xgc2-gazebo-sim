@@ -1,5 +1,5 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-20260624-001
+id: gazebo-sim-20260624-002
 distribution: focal
 component: main
 architectures:
@@ -10,11 +10,11 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.0.27-1
+    version: 1.0.28-1
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.0.27-1
+    version: 1.0.28-1
   gazebo_sim_manager:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic

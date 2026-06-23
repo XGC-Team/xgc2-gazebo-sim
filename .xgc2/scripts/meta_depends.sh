@@ -26,20 +26,35 @@ if [[ "${MODE}" != "compatible" && "${MODE}" != "latest" ]]; then
   exit 1
 fi
 
-packages=(
-  ros-noetic-xgc2-gazebo-sim-manager
-  ros-noetic-xgc2-gazebo-sim-examples
-  ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-  ros-noetic-xgc2-gazebo-sim-scout
-  ros-noetic-xgc2-gazebo-sim-px4-1-12
-  ros-noetic-xgc2-gazebo-sim-px4-1-14
-  ros-noetic-xgc2-gazebo-sim-fs150-sitl
-)
+if [[ -z "${RELEASE_SET}" || ! -f "${RELEASE_SET}" ]]; then
+  echo "--release-set is required" >&2
+  exit 1
+fi
 
 depends=()
-for package in "${packages[@]}"; do
-  depends+=("${package}")
-done
+while read -r package version; do
+  [[ -z "${package}" ]] && continue
+  depends+=("${package} (>= ${version})")
+done < <(
+  awk '
+    function flush() {
+      if (package != "" && version != "" && local != "true") {
+        print package, version
+      }
+      package = ""
+      version = ""
+      local = "false"
+    }
+    /^  [A-Za-z0-9_]+:/ {
+      flush()
+      next
+    }
+    $1 == "local:" { local = $2 }
+    $1 == "apt:" { package = $2 }
+    package != "" && $1 == "version:" { version = $2 }
+    END { flush() }
+  ' "${RELEASE_SET}"
+)
 
 depends+=("ros-noetic-vrpn-client-ros")
 

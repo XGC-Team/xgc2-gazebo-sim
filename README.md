@@ -31,16 +31,16 @@ ros-noetic-vrpn-client-ros
 
 - Child repositories own their Debian package payloads and can publish compatible
   packaging revisions independently.
-- The aggregate package must not pin exact child versions in `Depends`; it only
-  requires compatible package names.
+- The aggregate package uses minimum child versions in `Depends`, so apt upgrades
+  stale installed children when a quickstart needs newer launch/config assets.
 - Child packages may pin internal split-package dependencies when payloads must
   match exactly, for example a PX4 Gazebo package depending on its matching PX4
   runtime package.
 - Bump the child product version when that child package changes.
 - Bump the aggregate product version when the dependency set, package naming, or
   compatibility contract changes.
-- `.xgc2/release-set.yml` records the intended release set for orchestration and
-  audit; it is not used to create strict apt version dependencies for users.
+- `.xgc2/release-set.yml` records the intended release set for orchestration,
+  audit, and aggregate minimum-version dependencies.
 
 ## Central Release
 
