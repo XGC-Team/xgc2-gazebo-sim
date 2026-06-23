@@ -16,8 +16,8 @@ check_min_version ros-noetic-xgc2-gazebo-sim-manager 1.0.13-1
 check_min_version ros-noetic-xgc2-gazebo-sim-examples 1.0.13-1
 check_min_version ros-noetic-xgc2-gazebo-sim-vrpn-bridge 1.0.13-1
 check_min_version ros-noetic-xgc2-gazebo-sim-scout 0.4.8-1
-check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-12 1.12.3-6
+check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-12 1.12.3-7
 check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-14 1.14.4-6
-check_min_version ros-noetic-xgc2-gazebo-sim-fs150-sitl 1.0.11-1
+check_min_version ros-noetic-xgc2-gazebo-sim-fs150-sitl 1.0.12-1
 
 echo "Installed Gazebo simulation suite check passed"
