@@ -1,5 +1,5 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-20260605-002
+id: gazebo-sim-20260624-001
 distribution: focal
 component: main
 architectures:
@@ -10,29 +10,29 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.0.23-1
+    version: 1.0.27-1
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.0.23-1
+    version: 1.0.27-1
   gazebo_sim_manager:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-manager
-    version: 1.0.11-1
+    version: 1.0.12-1
   gazebo_sim_examples:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-examples
-    version: 1.0.11-1
+    version: 1.0.12-1
   gazebo_sim_vrpn_bridge:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    version: 1.0.11-1
+    version: 1.0.12-1
   scout:
     repo: lxk36/xgc2-agilex
     ref: xgc2-noetic
@@ -56,10 +56,4 @@ packages:
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-fs150-sitl
-    version: 1.0.3-1
-  cerlab_uav_sim:
-    repo: lxk36/xgc2-cerlab-uav-sim
-    ref: noetic
-    workflow: build-debs.yml
-    apt: ros-noetic-xgc2-gazebo-sim-cerlab-uav
-    version: 1.0.0-1
+    version: 1.0.11-1

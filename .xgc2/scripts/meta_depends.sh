@@ -34,7 +34,6 @@ packages=(
   ros-noetic-xgc2-gazebo-sim-px4-1-12
   ros-noetic-xgc2-gazebo-sim-px4-1-14
   ros-noetic-xgc2-gazebo-sim-fs150-sitl
-  ros-noetic-xgc2-gazebo-sim-cerlab-uav
 )
 
 depends=()

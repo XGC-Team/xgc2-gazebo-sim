@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.0.26-1
+version: 1.0.27-1
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 
@@ -24,7 +24,6 @@ apt:
     - ros-noetic-xgc2-gazebo-sim-px4-1-12
     - ros-noetic-xgc2-gazebo-sim-px4-1-14
     - ros-noetic-xgc2-gazebo-sim-fs150-sitl
-    - ros-noetic-xgc2-gazebo-sim-cerlab-uav
     - ros-noetic-vrpn-client-ros
 
 usage:
@@ -38,7 +37,6 @@ usage:
     roslaunch --files gazebo_sim_px4_1_12 iris.launch gui:=false
     roslaunch --files gazebo_sim_px4_1_14 iris.launch gui:=false
     roslaunch --files gazebo_sim_fs150_sitl fs150.launch gui:=false
-    roslaunch --files xgc2_cerlab_uav_simulator start.launch
   notes: |
     This repository is the verified Gazebo simulation suite entrypoint. Source packages live in child product repositories.
     The aggregate package depends on child package names, but does not pin exact child versions.
