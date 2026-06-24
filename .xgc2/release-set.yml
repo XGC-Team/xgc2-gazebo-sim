@@ -10,11 +10,11 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.0.45-1
+    version: 1.0.46-1
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.0.45-1
+    version: 1.0.46-1
   gazebo_sim_worlds:
     repo: lxk36/xgc2-gazebo-sim-worlds
     ref: noetic
@@ -26,19 +26,19 @@ packages:
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-manager
-    version: 1.0.25-1
+    version: 1.0.26-1
   gazebo_sim_examples:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-examples
-    version: 1.0.25-1
+    version: 1.0.26-1
   gazebo_sim_vrpn_bridge:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    version: 1.0.25-1
+    version: 1.0.26-1
   scout:
     repo: lxk36/xgc2-agilex
     ref: xgc2-noetic
