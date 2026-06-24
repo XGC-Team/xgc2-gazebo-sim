@@ -22,3 +22,7 @@
 	path = cerlab-uav-sim
 	url = git@github.com:lxk36/xgc2-cerlab-uav-sim.git
 	branch = noetic
+[submodule "worlds"]
+	path = worlds
+	url = git@github.com:lxk36/xgc2-gazebo-sim-worlds.git
+	branch = noetic

@@ -49,6 +49,7 @@ docker run --rm \
 
     /workspace/gazebo-sim/.xgc2/scripts/package_debs.sh \
       --output-dir /workspace/out
+
   '
 
 echo "Debian package output:"

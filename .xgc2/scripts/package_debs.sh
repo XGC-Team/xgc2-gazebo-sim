@@ -67,8 +67,10 @@ Section: misc
 Priority: optional
 Architecture: ${ARCH}
 Maintainer: XGC2 <apt@example.com>
-Depends: ${depends}
 EOF
+    if [[ -n "${depends}" ]]; then
+      printf 'Depends: %s\n' "${depends}"
+    fi
     if [[ -n "${extra_fields}" ]]; then
       printf '%s\n' "${extra_fields}"
     fi
