@@ -1,0 +1,70 @@
+name: publish-child-debs
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_repo:
+        description: "Child repository in owner/name form"
+        required: true
+        type: string
+      run_id:
+        description: "Successful child workflow run id containing .deb artifacts"
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.XGC2_CI_PAT }}
+      APT_REPO_HOST: ${{ secrets.APT_REPO_HOST }}
+      APT_REPO_PORT: ${{ secrets.APT_REPO_PORT }}
+      APT_REPO_SSH_KEY: ${{ secrets.APT_REPO_SSH_KEY }}
+      APT_REPO_KNOWN_HOSTS: ${{ secrets.APT_REPO_KNOWN_HOSTS }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate inputs and secrets
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "${{ inputs.source_repo }}" in
+            lxk36/xgc2-*)
+              ;;
+            *)
+              echo "::error::source_repo must be an lxk36/xgc2-* repository"
+              exit 1
+              ;;
+          esac
+          test -n "${GH_TOKEN}"
+          test -n "${APT_REPO_HOST}"
+          test -n "${APT_REPO_SSH_KEY}"
+          test -n "${APT_REPO_KNOWN_HOSTS}"
+
+      - name: Download child deb artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          source_repo="${{ inputs.source_repo }}"
+          run_id="${{ inputs.run_id }}"
+
+          run_status="$(gh run view "${run_id}" --repo "${source_repo}" --json status,conclusion --jq '.status + " " + .conclusion')"
+          test "${run_status}" = "completed success"
+
+          artifact_dir="${RUNNER_TEMP}/child-artifacts"
+          deb_dir="${RUNNER_TEMP}/child-debs"
+          mkdir -p "${artifact_dir}" "${deb_dir}"
+          gh run download "${run_id}" --repo "${source_repo}" --dir "${artifact_dir}"
+          find "${artifact_dir}" -type f -name '*.deb' -exec cp -a {} "${deb_dir}/" \;
+          if ! compgen -G "${deb_dir}/*.deb" >/dev/null; then
+            echo "::error::no .deb artifacts found in ${source_repo} run ${run_id}"
+            exit 1
+          fi
+          {
+            echo "DEB_DIR=${deb_dir}"
+            echo "APT_REPO_PORT=${APT_REPO_PORT:-22}"
+          } >> "${GITHUB_ENV}"
+
+      - name: Publish child deb artifacts
+        shell: bash
+        run: .xgc2/scripts/publish_apt_repo.sh --deb-dir "${DEB_DIR}"
