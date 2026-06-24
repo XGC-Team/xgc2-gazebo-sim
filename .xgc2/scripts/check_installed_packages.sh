@@ -12,9 +12,9 @@ check_min_version() {
   dpkg --compare-versions "${installed_version}" ge "${min_version}"
 }
 
-check_min_version ros-noetic-xgc2-gazebo-sim-manager 1.0.13-1
-check_min_version ros-noetic-xgc2-gazebo-sim-examples 1.0.13-1
-check_min_version ros-noetic-xgc2-gazebo-sim-vrpn-bridge 1.0.13-1
+check_min_version ros-noetic-xgc2-gazebo-sim-manager 1.0.15-1
+check_min_version ros-noetic-xgc2-gazebo-sim-examples 1.0.15-1
+check_min_version ros-noetic-xgc2-gazebo-sim-vrpn-bridge 1.0.15-1
 check_min_version ros-noetic-xgc2-gazebo-sim-scout 0.4.8-1
 check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-12 1.12.3-7
 check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-14 1.14.4-6
