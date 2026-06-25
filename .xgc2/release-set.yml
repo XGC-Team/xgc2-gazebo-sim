@@ -1,5 +1,5 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-20260625-013
+id: gazebo-sim-20260625-014
 distribution: focal
 component: main
 architectures:
@@ -10,11 +10,11 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.0.49-1
+    version: 1.0.51-1
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.0.49-1
+    version: 1.0.51-1
   gazebo_sim_worlds:
     repo: lxk36/xgc2-gazebo-sim-worlds
     ref: noetic
@@ -26,19 +26,19 @@ packages:
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-manager
-    version: 1.0.29-1
+    version: 1.0.32-1
   gazebo_sim_examples:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-examples
-    version: 1.0.29-1
+    version: 1.0.32-1
   gazebo_sim_vrpn_bridge:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: build-debs.yml
     apt: ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    version: 1.0.29-1
+    version: 1.0.32-1
   scout:
     repo: lxk36/xgc2-agilex
     ref: xgc2-noetic
