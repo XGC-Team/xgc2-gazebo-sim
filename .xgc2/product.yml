@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.0.53-1
+version: 1.0.54-1
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 
