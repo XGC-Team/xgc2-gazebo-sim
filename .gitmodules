@@ -14,10 +14,6 @@
 	path = fs150-sitl
 	url = git@github.com:lxk36/xgc2-fs150-sitl.git
 	branch = noetic
-[submodule "gazebo-sim-tools"]
-	path = gazebo-sim-tools
-	url = git@github.com:lxk36/xgc2-gazebo-sim-tools.git
-	branch = noetic
 [submodule "cerlab-uav-sim"]
 	path = cerlab-uav-sim
 	url = git@github.com:lxk36/xgc2-cerlab-uav-sim.git
