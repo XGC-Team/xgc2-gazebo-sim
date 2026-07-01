@@ -32,7 +32,7 @@ ros-noetic-vrpn-client-ros
 
 - Child repositories own their Debian package payloads and can publish compatible
   packaging revisions independently.
-- Source checkouts for the split visualization and VRPN bridge packages are
+- Source checkouts for the tools, visualization, and VRPN bridge packages are
   included here as submodules for full-suite development, but their Debian
   payloads are still owned by their child repositories.
 - The aggregate package uses minimum child versions in `Depends`, so apt upgrades

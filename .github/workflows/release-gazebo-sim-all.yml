@@ -33,6 +33,14 @@ jobs:
             repo: lxk36/xgc2-gazebo-sim-tools
             ref: noetic
             workflow: build-debs.yml
+          - name: gazebo-sim-visualization
+            repo: lxk36/xgc2-gazebo-sim-visualization
+            ref: noetic
+            workflow: build-debs.yml
+          - name: gazebo-sim-vrpn-bridge
+            repo: lxk36/xgc2-gazebo-sim-vrpn-bridge
+            ref: noetic
+            workflow: build-debs.yml
           - name: scout
             repo: lxk36/xgc2-agilex
             ref: xgc2-noetic
