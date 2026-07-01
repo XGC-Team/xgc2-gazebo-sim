@@ -1,4 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-.xgc2/scripts/check_version_bump.sh --staged
+requires_version_bump=false
+while IFS= read -r path; do
+  case "${path}" in
+    .github/workflows/*|.githooks/*|agilex|cerlab-uav-sim|fs150-sitl|gazebo-sim-tools|px4-sitl-112|px4-sitl-114|visualization|vrpn_bridge|worlds)
+      ;;
+    *)
+      requires_version_bump=true
+      ;;
+  esac
+done < <(git diff --cached --name-only)
+
+if [[ "${requires_version_bump}" == "true" ]]; then
+  .xgc2/scripts/check_version_bump.sh --staged
+fi
