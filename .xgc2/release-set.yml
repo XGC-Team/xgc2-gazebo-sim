@@ -10,62 +10,62 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.0.62-1
+    version: 1.1.0-2
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.0.62-1
+    version: 1.1.0-2
   gazebo_sim_worlds:
     repo: lxk36/xgc2-gazebo-sim-worlds
     ref: noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-worlds
-    version: 1.0.21-1
+    version: 1.1.0-1
   gazebo_sim_manager:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-manager
-    version: 1.0.45-1
+    version: 1.1.0-1
   gazebo_sim_examples:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-examples
-    version: 1.0.45-1
+    version: 1.1.0-1
   gazebo_sim_visualization:
     repo: lxk36/xgc2-gazebo-sim-visualization
     ref: noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-visualization
-    version: 1.0.45-1
+    version: 1.1.0-1
   gazebo_sim_vrpn_bridge:
     repo: lxk36/xgc2-gazebo-sim-vrpn-bridge
     ref: noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    version: 1.0.44-1
+    version: 1.1.0-1
   scout:
     repo: lxk36/xgc2-agilex
     ref: xgc2-noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-scout
     version: 0.4.9-1
   px4_112:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.12-noetic
-    workflow: build-runtime
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-px4-1-12
     version: 1.12.3-7
   px4_114:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.14-noetic
-    workflow: build-runtime
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-px4-1-14
     version: 1.14.4-6
   fs150_sitl:
     repo: lxk36/xgc2-fs150-sitl
     ref: noetic
-    workflow: build-debs.yml
+    workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-fs150-sitl
-    version: 1.0.14-1
+    version: 1.1.0-1

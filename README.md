@@ -46,8 +46,9 @@ ros-noetic-vrpn-client-ros
 - `.xgc2/release-set.yml` records the intended release set for orchestration,
   audit, and aggregate minimum-version dependencies.
 
-## Central Release
+## Release
 
-Use the `release-gazebo-sim-all` workflow in `compatible` mode.  It can trigger
-child workflows, wait for the child packages to appear in the APT repository,
-then publish the aggregate meta package.
+Each child repository owns its local `ci.yml` and `release.yml` workflows. The
+top-level `xgc2-devops` release orchestrator reads product metadata, triggers the
+child `release.yml` workflows by DAG layer, waits for the child packages to
+appear in the APT repository, then triggers this aggregate repository release.
