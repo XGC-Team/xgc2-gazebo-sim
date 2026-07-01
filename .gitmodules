@@ -22,3 +22,11 @@
 	path = worlds
 	url = git@github.com:lxk36/xgc2-gazebo-sim-worlds.git
 	branch = noetic
+[submodule "gazebo_sim_visualization"]
+	path = gazebo_sim_visualization
+	url = git@github.com:lxk36/xgc2-gazebo-sim-visualization.git
+	branch = noetic
+[submodule "gazebo_sim_vrpn_bridge"]
+	path = gazebo_sim_vrpn_bridge
+	url = git@github.com:lxk36/xgc2-gazebo-sim-vrpn-bridge.git
+	branch = noetic

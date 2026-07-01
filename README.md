@@ -19,6 +19,7 @@ The main aggregate package depends on these child package names:
 ```text
 ros-noetic-xgc2-gazebo-sim-manager
 ros-noetic-xgc2-gazebo-sim-examples
+ros-noetic-xgc2-gazebo-sim-visualization
 ros-noetic-xgc2-gazebo-sim-vrpn-bridge
 ros-noetic-xgc2-gazebo-sim-scout
 ros-noetic-xgc2-gazebo-sim-px4-1-12
@@ -31,6 +32,9 @@ ros-noetic-vrpn-client-ros
 
 - Child repositories own their Debian package payloads and can publish compatible
   packaging revisions independently.
+- Source checkouts for the split visualization and VRPN bridge packages are
+  included here as submodules for full-suite development, but their Debian
+  payloads are still owned by their child repositories.
 - The aggregate package uses minimum child versions in `Depends`, so apt upgrades
   stale installed children when a quickstart needs newer launch/config assets.
 - Child packages may pin internal split-package dependencies when payloads must
