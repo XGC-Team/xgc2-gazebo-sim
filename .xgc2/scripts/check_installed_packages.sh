@@ -15,10 +15,10 @@ check_min_version() {
 check_min_version ros-noetic-xgc2-gazebo-sim-manager 1.1.0-12
 check_min_version ros-noetic-xgc2-gazebo-sim-examples 1.1.0-12
 check_min_version ros-noetic-xgc2-robot-visualization 0.1.0-1
-check_min_version ros-noetic-xgc2-gazebo-sim-visualization 1.1.0-6
+check_min_version ros-noetic-xgc2-gazebo-sim-visualization 1.1.0-7
 check_min_version ros-noetic-xgc2-gazebo-sim-vrpn-bridge 1.1.0-8
 check_min_version ros-noetic-xgc2-gazebo-sim-worlds 1.1.0-8
-check_min_version ros-noetic-xgc2-gazebo-sim-scout 0.4.9-6
+check_min_version ros-noetic-xgc2-gazebo-sim-scout 0.4.9-7
 check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-12 1.12.3-11
 check_min_version ros-noetic-xgc2-gazebo-sim-px4-1-14 1.14.4-10
 check_min_version ros-noetic-xgc2-gazebo-sim-fs150-sitl 1.1.0-7
