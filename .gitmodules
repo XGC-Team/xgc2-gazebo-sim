@@ -1,6 +1,6 @@
 [submodule "agilex"]
 	path = agilex
-	url = git@github.com:lxk36/xgc2-agilex.git
+	url = git@github.com:lxk36/xgc2-gazebo-sim-agilex.git
 	branch = xgc2-noetic
 [submodule "px4-sitl-112"]
 	path = px4-sitl-112
