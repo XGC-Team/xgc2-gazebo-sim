@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.1.0-21
+version: 1.1.0-22
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 ros:
@@ -21,7 +21,7 @@ apt:
   - ros-noetic-xgc2-gazebo-sim-visualization (>= 1.1.0-7)
   - ros-noetic-xgc2-gazebo-sim-vrpn-bridge (>= 1.1.0-8)
   - ros-noetic-xgc2-gazebo-sim-worlds (>= 1.1.0-8)
-  - ros-noetic-xgc2-gazebo-sim-scout (>= 0.4.9-11)
+  - ros-noetic-xgc2-gazebo-sim-scout (>= 0.4.9-12)
   - ros-noetic-xgc2-gazebo-sim-px4-1-12 (>= 1.12.3-11)
   - ros-noetic-xgc2-gazebo-sim-px4-1-14 (>= 1.14.4-10)
   - ros-noetic-xgc2-gazebo-sim-fs150-sitl (>= 1.1.0-7)
