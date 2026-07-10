@@ -2,9 +2,9 @@
 set -euo pipefail
 
 RELEASE_SET=""
-APT_REPO_BASE_URL="${APT_REPO_BASE_URL:-https://xgc2.apt.xiaokang.ink}"
-DISTRIBUTION="${APT_REPO_DISTRIBUTION:-focal}"
-COMPONENT="${APT_REPO_COMPONENT:-main}"
+XGC2_APT_BASE_URL="${XGC2_APT_BASE_URL:-https://xgc2.apt.xiaokang.ink}"
+DISTRIBUTION="${PACKAGE_DISTRIBUTION:-focal}"
+COMPONENT="${XGC2_APT_COMPONENT:-main}"
 ARCH="${ARCH:-$(dpkg --print-architecture)}"
 RETRIES="${RETRIES:-20}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-30}"
@@ -44,7 +44,7 @@ if [[ -z "${RELEASE_SET}" || ! -f "${RELEASE_SET}" ]]; then
   exit 1
 fi
 
-packages_url="${APT_REPO_BASE_URL%/}/dists/${DISTRIBUTION}/${COMPONENT}/binary-${ARCH}/Packages"
+packages_url="${XGC2_APT_BASE_URL%/}/dists/${DISTRIBUTION}/${COMPONENT}/binary-${ARCH}/Packages"
 
 fetch_packages() {
   if curl -fsSL "${packages_url}" 2>/dev/null; then
