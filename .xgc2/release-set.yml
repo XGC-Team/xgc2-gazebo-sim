@@ -9,11 +9,11 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.1.0-33
+    version: 1.1.0-34
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.1.0-33
+    version: 1.1.0-34
   gazebo_sim_worlds:
     repo: lxk36/xgc2-gazebo-sim-worlds
     ref: noetic
@@ -25,13 +25,13 @@ packages:
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-manager
-    version: 1.1.0-19
+    version: 1.1.0-20
   gazebo_sim_examples:
     repo: lxk36/xgc2-gazebo-sim-tools
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-examples
-    version: 1.1.0-19
+    version: 1.1.0-20
   robot_visualization:
     repo: lxk36/xgc2-robot-visualization
     ref: noetic
@@ -49,28 +49,28 @@ packages:
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-vrpn-bridge
-    version: 1.1.0-11
+    version: 1.1.0-12
   scout:
     repo: lxk36/xgc2-gazebo-sim-agilex
     ref: xgc2-noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-scout
-    version: 0.4.9-21
+    version: 0.4.9-22
   px4_112:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.12-noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-px4-1-12
-    version: 1.12.3-14
+    version: 1.12.3-15
   px4_114:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.14-noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-px4-1-14
-    version: 1.14.4-12
+    version: 1.14.4-13
   fs150_sitl:
     repo: lxk36/xgc2-fs150-sitl
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-fs150-sitl
-    version: 1.1.0-9
+    version: 1.1.0-10
