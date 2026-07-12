@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.1.0-36
+version: 1.1.0-37
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 ros:
@@ -15,8 +15,8 @@ apt:
   - ros-noetic-xgc2-gazebo-sim
   - ros-noetic-xgc2-gazebo-sim-all
   depends:
-  - ros-noetic-xgc2-gazebo-sim-manager (>= 1.1.0-22)
-  - ros-noetic-xgc2-gazebo-sim-examples (>= 1.1.0-22)
+  - ros-noetic-xgc2-gazebo-sim-manager (>= 1.1.0-23)
+  - ros-noetic-xgc2-gazebo-sim-examples (>= 1.1.0-23)
   - ros-noetic-xgc2-robot-visualization (>= 0.1.0-5)
   - ros-noetic-xgc2-gazebo-sim-visualization (>= 1.1.0-11)
   - ros-noetic-xgc2-gazebo-sim-vrpn-bridge (>= 1.1.0-13)
@@ -35,6 +35,8 @@ usage:
   smoke_test: 'dpkg -s ros-noetic-xgc2-gazebo-sim
 
     roslaunch --files gazebo_sim_examples fs150_ugv_vrpn_stack.launch
+
+    rosrun gazebo_sim_examples uav_auto_takeoff_track.py --help
 
     roslaunch --files gazebo_sim_visualization fs150_vrpn_tracking_rviz.launch rviz:=false
 
