@@ -46,7 +46,7 @@ ros-noetic-vrpn-client-ros
 - `.xgc2/release-set.yml` records the intended release set for orchestration,
   audit, and aggregate minimum-version dependencies.
 
-The `1.1.0-37` aggregate requires `gazebo_sim_manager` and
+The `1.1.0-38` aggregate requires `gazebo_sim_manager` and
 `gazebo_sim_examples` `1.1.0-23` or newer. That tools release includes the
 closed-loop FS150 NMPC command helper used after the simulation stack is ready:
 
@@ -56,6 +56,10 @@ rosrun gazebo_sim_examples uav_auto_takeoff_track.py --ns uav1 --height 3.0
 
 The helper returns success only after takeoff, transition to `custom1`, and two
 new successful NMPC debug samples have all been confirmed.
+
+It also requires `gazebo_sim_visualization` `1.1.0-12` or newer so XGC can
+publish PX4 models and actual path history to Lichtblick as
+`foxglove_msgs/SceneUpdate`.
 
 ## Release
 
