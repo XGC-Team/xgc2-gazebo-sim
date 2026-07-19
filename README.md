@@ -46,7 +46,7 @@ ros-noetic-vrpn-client-ros
 - `.xgc2/release-set.yml` records the intended release set for orchestration,
   audit, and aggregate minimum-version dependencies.
 
-The `1.1.0-39` aggregate requires `gazebo_sim_manager` and
+The `1.1.0-40` aggregate requires `gazebo_sim_manager` and
 `gazebo_sim_examples` `1.1.0-24` or newer. That tools release includes the
 closed-loop FS150 NMPC command helper used after the simulation stack is ready:
 

@@ -30,3 +30,7 @@
 	path = vrpn_bridge
 	url = git@github.com:lxk36/xgc2-gazebo-sim-vrpn-bridge.git
 	branch = noetic
+[submodule "camera"]
+	path = camera
+	url = git@github.com:lxk36/xgc2-gazebo-sim-camera.git
+	branch = main
