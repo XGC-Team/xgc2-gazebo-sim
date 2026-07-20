@@ -17,7 +17,6 @@ depends on the main meta package.
 The main aggregate package depends on these child package names:
 
 ```text
-ros-noetic-xgc2-gazebo-sim-manager
 ros-noetic-xgc2-gazebo-sim-examples
 ros-noetic-xgc2-gazebo-sim-visualization
 ros-noetic-xgc2-gazebo-sim-vrpn-bridge
@@ -46,9 +45,10 @@ ros-noetic-vrpn-client-ros
 - `.xgc2/release-set.yml` records the intended release set for orchestration,
   audit, and aggregate minimum-version dependencies.
 
-The `1.1.0-40` aggregate requires `gazebo_sim_manager` and
-`gazebo_sim_examples` `1.1.0-24` or newer. That tools release includes the
-closed-loop FS150 NMPC command helper used after the simulation stack is ready:
+The standalone `gazebo_sim_manager` package has been retired in favor of XGC2
+ground-station Automations and the ROS1 Tools Adapter. The aggregate retains
+`gazebo_sim_examples` temporarily for legacy launch examples. Its closed-loop
+FS150 NMPC command helper remains available:
 
 ```bash
 rosrun gazebo_sim_examples uav_auto_takeoff_track.py --ns uav1 --height 3.0
