@@ -1,5 +1,5 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-20260720-036
+id: gazebo-sim-20260720-037
 distribution: focal
 component: main
 architectures:
@@ -9,11 +9,11 @@ packages:
   gazebo_sim_all:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.1.0-48
+    version: 1.1.0-49
   gazebo_sim_all_compat:
     local: true
     apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.1.0-48
+    version: 1.1.0-49
   gazebo_sim_worlds:
     repo: lxk36/xgc2-gazebo-sim-worlds
     ref: noetic
@@ -25,7 +25,7 @@ packages:
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-examples
-    version: 1.1.0-27
+    version: 1.1.0-28
   robot_visualization:
     repo: lxk36/xgc2-robot-visualization
     ref: noetic
@@ -49,7 +49,7 @@ packages:
     ref: xgc2-noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-scout
-    version: 0.4.9-24
+    version: 0.4.9-25
   px4_112:
     repo: lxk36/xgc2-px4-sitl
     ref: v1.12-noetic
