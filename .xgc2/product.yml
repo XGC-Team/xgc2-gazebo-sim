@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim Catalog
-version: 1.1.0-70
+version: 1.1.0-71
 kind: catalog
 summary: Non-publishing catalog for the XGC2 Gazebo Classic simulation products.
 groups:
