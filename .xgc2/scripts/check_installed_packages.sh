@@ -14,6 +14,7 @@ check_min_version() {
 
 check_min_version ros-noetic-xgc2-gazebo-sim-examples 1.1.0-30
 check_min_version ros-noetic-xgc2-gazebo-sim-mecanum 0.1.0-1
+check_min_version ros-noetic-xgc2-px4-multirotor-controller-msgs 1.2.0-3
 check_min_version ros-noetic-xgc2-robot-visualization 0.1.0-1
 check_min_version ros-noetic-xgc2-gazebo-sim-visualization 1.1.0-12
 check_min_version ros-noetic-xgc2-gazebo-sim-vrpn-bridge 1.1.0-8
