@@ -13,6 +13,7 @@ check_min_version() {
 }
 
 check_min_version ros-noetic-xgc2-gazebo-sim-examples 1.1.0-30
+check_min_version ros-noetic-xgc2-gazebo-sim-mecanum 0.1.0-1
 check_min_version ros-noetic-xgc2-robot-visualization 0.1.0-1
 check_min_version ros-noetic-xgc2-gazebo-sim-visualization 1.1.0-12
 check_min_version ros-noetic-xgc2-gazebo-sim-vrpn-bridge 1.1.0-8
@@ -27,6 +28,9 @@ test -f "/opt/ros/noetic/share/gazebo_sim_worlds/worlds/clearpath_playpen/clearp
 test -f "/opt/ros/noetic/share/gazebo_sim_worlds/worlds/corridor_dynamic_9/corridor_dynamic_9.world"
 test -f "/opt/ros/noetic/share/gazebo_sim_worlds/models/corridor/model.sdf"
 test -x "/opt/ros/noetic/lib/gazebo_sim_examples/uav_auto_takeoff_track.py"
+test -f "/opt/ros/noetic/lib/libgazebo_sim_mecanum_contract.so"
+test -f "/opt/ros/noetic/share/gazebo_sim_mecanum/models/xgc2_mecanum_ugv/model.sdf"
 rosrun gazebo_sim_examples uav_auto_takeoff_track.py --help >/tmp/xgc2-uav-auto-takeoff-track-help.txt
+roslaunch --files gazebo_sim_mecanum simple.launch gui:=false >/tmp/xgc2-mecanum-simple-files.txt
 
 echo "Installed Gazebo simulation suite check passed"
