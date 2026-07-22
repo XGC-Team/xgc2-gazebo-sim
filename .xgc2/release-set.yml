@@ -1,11 +1,17 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-catalog-20260723-051
+id: gazebo-sim-catalog-20260723-052
 distribution: focal
 component: main
 architectures:
 - amd64
 - arm64
 packages:
+  mecanum_description:
+    repo: lxk36/xgc2-mecanum-description
+    ref: noetic
+    workflow: release.yml
+    apt: ros-noetic-xgc2-mecanum-description
+    version: 0.1.0-1
   gazebo_sim_camera:
     repo: lxk36/xgc2-gazebo-sim-camera
     ref: main
@@ -17,7 +23,7 @@ packages:
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-mecanum
-    version: 0.1.0-1
+    version: 0.1.0-2
   gazebo_sim_worlds:
     repo: lxk36/xgc2-gazebo-sim-scenes
     ref: noetic
@@ -35,13 +41,13 @@ packages:
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-robot-visualization
-    version: 0.1.0-7
+    version: 0.1.0-8
   gazebo_sim_visualization:
     repo: lxk36/xgc2-gazebo-sim-visualization
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-visualization
-    version: 1.1.0-14
+    version: 1.1.0-15
   gazebo_sim_vrpn_bridge:
     repo: lxk36/xgc2-gazebo-sim-vrpn-bridge
     ref: noetic
