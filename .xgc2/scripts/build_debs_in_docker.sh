@@ -65,8 +65,19 @@ docker run --rm \
         sleep "$((attempt * 5))"
       done
     }
+    apt_install() {
+      local attempt
+      for attempt in 1 2 3; do
+        if apt-get install "$@"; then
+          return 0
+        fi
+        [[ "${attempt}" -lt 3 ]] || return 1
+        sleep "$((attempt * 5))"
+        apt_update
+      done
+    }
     apt_update
-    apt-get install -y --no-install-recommends ca-certificates curl dpkg-dev fakeroot gnupg
+    apt_install -y --no-install-recommends ca-certificates curl dpkg-dev fakeroot gnupg
 
     /workspace/gazebo-sim/.xgc2/scripts/package_debs.sh \
       --output-dir /workspace/out
@@ -82,7 +93,7 @@ docker run --rm \
           > /etc/apt/sources.list.d/00-xgc2-release-train.list
       fi
       apt_update
-      apt-get install -y --no-install-recommends /workspace/out/*.deb
+      apt_install -y --no-install-recommends /workspace/out/*.deb
       /workspace/gazebo-sim/.xgc2/scripts/check_installed_packages.sh
     fi
 
