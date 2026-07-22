@@ -17,7 +17,11 @@ depends on the main meta package.
 The main aggregate package depends on these child package names:
 
 ```text
-ros-noetic-xgc2-gazebo-sim-examples
+ros-noetic-xgc2-gazebo-scene
+ros-noetic-xgc2-gazebo-sim-worlds
+ros-noetic-xgc2-gazebo-sim-camera
+ros-noetic-xgc2-gazebo-sim-mecanum
+ros-noetic-xgc2-robot-visualization
 ros-noetic-xgc2-gazebo-sim-visualization
 ros-noetic-xgc2-gazebo-sim-vrpn-bridge
 ros-noetic-xgc2-gazebo-sim-scout
@@ -45,17 +49,13 @@ ros-noetic-vrpn-client-ros
 - `.xgc2/release-set.yml` records the intended release set for orchestration,
   audit, and aggregate minimum-version dependencies.
 
-The standalone `gazebo_sim_manager` package has been retired in favor of XGC2
-ground-station Automations and the ROS1 Tools Adapter. The aggregate retains
-`gazebo_sim_examples` temporarily for legacy launch examples. Its closed-loop
-FS150 NMPC command helper remains available:
+The standalone `gazebo_sim_manager` and `gazebo_sim_examples` packages have
+been retired in favor of XGC2 ground-station Automations and built-in process
+definitions. They are not part of this product's dependency or release graph.
 
-```bash
-rosrun gazebo_sim_examples uav_auto_takeoff_track.py --ns uav1 --height 3.0
-```
-
-The helper returns success only after takeoff, transition to `custom1`, and two
-new successful NMPC debug samples have all been confirmed.
+The `scenes` child repository owns two ROS packages: `gazebo_sim_worlds` for
+reusable world/model assets and `xgc2_gazebo_scene` for scene direction and
+obstacle control.
 
 It also requires `gazebo_sim_visualization` `1.1.0-12` or newer so XGC can
 publish PX4 models and actual path history to Lichtblick as

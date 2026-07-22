@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.1.0-65
+version: 1.1.0-66
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 ros:
@@ -15,13 +15,13 @@ apt:
   - ros-noetic-xgc2-gazebo-sim
   - ros-noetic-xgc2-gazebo-sim-all
   depends:
-  - ros-noetic-xgc2-gazebo-scene (>= 1.1.0-33)
+  - ros-noetic-xgc2-gazebo-scene (>= 1.2.0-1)
   - ros-noetic-xgc2-gazebo-sim-camera (>= 0.1.0-7)
   - ros-noetic-xgc2-gazebo-sim-mecanum (>= 0.1.0-1)
   - ros-noetic-xgc2-robot-visualization (>= 0.1.0-5)
   - ros-noetic-xgc2-gazebo-sim-visualization (>= 1.1.0-12)
   - ros-noetic-xgc2-gazebo-sim-vrpn-bridge (>= 1.1.0-16)
-  - ros-noetic-xgc2-gazebo-sim-worlds (>= 1.1.0-14)
+  - ros-noetic-xgc2-gazebo-sim-worlds (>= 1.2.0-1)
   - ros-noetic-xgc2-gazebo-sim-scout (>= 0.4.9-26)
   - ros-noetic-xgc2-gazebo-sim-px4-1-12 (>= 1.12.3-16)
   - ros-noetic-xgc2-gazebo-sim-px4-1-14 (>= 1.14.4-13)
@@ -67,7 +67,7 @@ ownership:
   - cerlab-uav-sim
 release:
   requires:
-  - xgc2-gazebo-sim-tools
+  - xgc2-gazebo-sim-scenes
   - xgc2-gazebo-sim-scout
   - xgc2-px4-sitl-112
   dependency_policy:
@@ -75,10 +75,9 @@ release:
     xgc2-gazebo-sim-mecanum: order
     xgc2-gazebo-sim-fs150-sitl: order
     xgc2-gazebo-sim-scout: order
-    xgc2-gazebo-sim-tools: order
+    xgc2-gazebo-sim-scenes: order
     xgc2-gazebo-sim-visualization: order
     xgc2-gazebo-sim-vrpn-bridge: order
-    xgc2-gazebo-sim-worlds: order
     xgc2-px4-sitl-112: order
     xgc2-px4-sitl-114: order
     xgc2-robot-visualization: order
