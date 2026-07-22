@@ -1,83 +1,16 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
-name: XGC2 Gazebo Sim
-version: 1.1.0-66
-kind: ros1-apt
-summary: Gazebo Classic simulation meta package for ROS Noetic.
+name: XGC2 Gazebo Sim Catalog
+version: 1.1.0-67
+kind: catalog
+summary: Non-publishing catalog for the XGC2 Gazebo Classic simulation products.
+groups:
+- gazebo-sim
 ros:
   distro: noetic
   packages: []
-apt:
-  distribution: focal
-  install:
-  - ros-noetic-xgc2-gazebo-sim
-  packages:
-  - ros-noetic-xgc2-gazebo-sim
-  - ros-noetic-xgc2-gazebo-sim-all
-  depends:
-  - ros-noetic-xgc2-gazebo-scene (>= 1.2.0-1)
-  - ros-noetic-xgc2-gazebo-sim-camera (>= 0.1.0-7)
-  - ros-noetic-xgc2-gazebo-sim-mecanum (>= 0.1.0-1)
-  - ros-noetic-xgc2-robot-visualization (>= 0.1.0-5)
-  - ros-noetic-xgc2-gazebo-sim-visualization (>= 1.1.0-12)
-  - ros-noetic-xgc2-gazebo-sim-vrpn-bridge (>= 1.1.0-16)
-  - ros-noetic-xgc2-gazebo-sim-worlds (>= 1.2.0-1)
-  - ros-noetic-xgc2-gazebo-sim-scout (>= 0.4.9-26)
-  - ros-noetic-xgc2-gazebo-sim-px4-1-12 (>= 1.12.3-16)
-  - ros-noetic-xgc2-gazebo-sim-px4-1-14 (>= 1.14.4-13)
-  - ros-noetic-xgc2-gazebo-sim-fs150-sitl (>= 1.1.0-13)
-  - ros-noetic-vrpn-client-ros
 usage:
-  install: 'sudo apt update
-
-    sudo apt install ros-noetic-xgc2-gazebo-sim
-
-    '
-  smoke_test: 'dpkg -s ros-noetic-xgc2-gazebo-sim
-
-    test -f /opt/ros/noetic/lib/libxgc2_gazebo_scene_system.so
-
-    roslaunch --files gazebo_sim_visualization fs150_vrpn_tracking_rviz.launch rviz:=false
-
-    roslaunch --files gazebo_sim_scout simple.launch rviz:=false
-
-    roslaunch --files gazebo_sim_mecanum simple.launch gui:=false
-
-    roslaunch --files gazebo_sim_px4_1_12 iris.launch gui:=false
-
-    roslaunch --files gazebo_sim_px4_1_14 iris.launch gui:=false
-
-    roslaunch --files gazebo_sim_fs150_sitl fs150.launch gui:=false
-
-    '
-  notes: 'This repository is the verified Gazebo simulation suite entrypoint. Source
-    packages live in child product repositories.
-
-    The aggregate package uses minimum child package versions so apt upgrades stale
-    installed children when a quickstart requires newer launch assets.
-
-    Child repositories may publish compatible packaging revisions independently; bump
-    this product version only when the aggregate dependency set or compatibility contract
-    changes.
-
-    '
-ownership:
-  paths:
-  - fs150-sitl
-  - cerlab-uav-sim
-release:
-  requires:
-  - xgc2-gazebo-sim-scenes
-  - xgc2-gazebo-sim-scout
-  - xgc2-px4-sitl-112
-  dependency_policy:
-    xgc2-gazebo-sim-camera: order
-    xgc2-gazebo-sim-mecanum: order
-    xgc2-gazebo-sim-fs150-sitl: order
-    xgc2-gazebo-sim-scout: order
-    xgc2-gazebo-sim-scenes: order
-    xgc2-gazebo-sim-visualization: order
-    xgc2-gazebo-sim-vrpn-bridge: order
-    xgc2-px4-sitl-112: order
-    xgc2-px4-sitl-114: order
-    xgc2-robot-visualization: order
+  notes: |
+    This repository records the Gazebo simulation product set and compatible
+    versions. It does not build, install, or publish an aggregate Debian
+    package. Consumers install only the independent products they use.

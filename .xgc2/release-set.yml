@@ -1,19 +1,11 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-20260723-049
+id: gazebo-sim-catalog-20260723-050
 distribution: focal
 component: main
 architectures:
 - amd64
 - arm64
 packages:
-  gazebo_sim_all:
-    local: true
-    apt: ros-noetic-xgc2-gazebo-sim
-    version: 1.1.0-66
-  gazebo_sim_all_compat:
-    local: true
-    apt: ros-noetic-xgc2-gazebo-sim-all
-    version: 1.1.0-66
   gazebo_sim_camera:
     repo: lxk36/xgc2-gazebo-sim-camera
     ref: main
