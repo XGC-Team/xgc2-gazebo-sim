@@ -1,5 +1,5 @@
 schema: xgc2.release-set.v1
-id: gazebo-sim-catalog-20260723-054
+id: gazebo-sim-catalog-20260723-055
 distribution: focal
 component: main
 architectures:
@@ -29,13 +29,13 @@ packages:
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-sim-worlds
-    version: 1.2.0-3
+    version: 1.2.0-4
   gazebo_scene:
     repo: lxk36/xgc2-gazebo-sim-scenes
     ref: noetic
     workflow: release.yml
     apt: ros-noetic-xgc2-gazebo-scene
-    version: 1.2.0-3
+    version: 1.2.0-4
   robot_visualization:
     repo: lxk36/xgc2-robot-visualization
     ref: noetic
