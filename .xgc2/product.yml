@@ -1,7 +1,7 @@
 schema: xgc2.product.v1
 id: xgc2-gazebo-sim
 name: XGC2 Gazebo Sim
-version: 1.1.0-63
+version: 1.1.0-64
 kind: ros1-apt
 summary: Gazebo Classic simulation meta package for ROS Noetic.
 ros:
@@ -15,13 +15,12 @@ apt:
   - ros-noetic-xgc2-gazebo-sim
   - ros-noetic-xgc2-gazebo-sim-all
   depends:
-  - ros-noetic-xgc2-gazebo-sim-examples (>= 1.1.0-30)
+  - ros-noetic-xgc2-gazebo-scene (>= 1.1.0-33)
   - ros-noetic-xgc2-gazebo-sim-camera (>= 0.1.0-7)
   - ros-noetic-xgc2-gazebo-sim-mecanum (>= 0.1.0-1)
-  - ros-noetic-xgc2-px4-multirotor-controller-msgs (>= 1.2.0-3)
   - ros-noetic-xgc2-robot-visualization (>= 0.1.0-5)
   - ros-noetic-xgc2-gazebo-sim-visualization (>= 1.1.0-12)
-  - ros-noetic-xgc2-gazebo-sim-vrpn-bridge (>= 1.1.0-13)
+  - ros-noetic-xgc2-gazebo-sim-vrpn-bridge (>= 1.1.0-15)
   - ros-noetic-xgc2-gazebo-sim-worlds (>= 1.1.0-14)
   - ros-noetic-xgc2-gazebo-sim-scout (>= 0.4.9-26)
   - ros-noetic-xgc2-gazebo-sim-px4-1-12 (>= 1.12.3-16)
@@ -36,9 +35,7 @@ usage:
     '
   smoke_test: 'dpkg -s ros-noetic-xgc2-gazebo-sim
 
-    roslaunch --files gazebo_sim_examples fs150_ugv_vrpn_stack.launch
-
-    rosrun gazebo_sim_examples uav_auto_takeoff_track.py --help
+    test -f /opt/ros/noetic/lib/libxgc2_gazebo_scene_system.so
 
     roslaunch --files gazebo_sim_visualization fs150_vrpn_tracking_rviz.launch rviz:=false
 
@@ -73,7 +70,6 @@ release:
   - xgc2-gazebo-sim-tools
   - xgc2-gazebo-sim-scout
   - xgc2-px4-sitl-112
-  - xgc2-ros-msgs
   dependency_policy:
     xgc2-gazebo-sim-camera: order
     xgc2-gazebo-sim-mecanum: order
@@ -86,4 +82,3 @@ release:
     xgc2-px4-sitl-112: order
     xgc2-px4-sitl-114: order
     xgc2-robot-visualization: order
-    xgc2-ros-msgs: verify
