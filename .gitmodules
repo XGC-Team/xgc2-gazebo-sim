@@ -1,40 +1,40 @@
 [submodule "agilex"]
 	path = agilex
-	url = git@github.com:lxk36/xgc2-gazebo-sim-agilex.git
+	url = git@github.com:XGC-Team/xgc2-gazebo-sim-agilex.git
 	branch = xgc2-noetic
 [submodule "px4-sitl-112"]
 	path = px4-sitl-112
-	url = git@github.com:lxk36/xgc2-px4-sitl.git
+	url = git@github.com:XGC-Team/xgc2-px4-sitl.git
 	branch = v1.12-noetic
 [submodule "px4-sitl-114"]
 	path = px4-sitl-114
-	url = git@github.com:lxk36/xgc2-px4-sitl.git
+	url = git@github.com:XGC-Team/xgc2-px4-sitl.git
 	branch = v1.14-noetic
 [submodule "fs150-sitl"]
 	path = fs150-sitl
-	url = git@github.com:lxk36/xgc2-fs150-sitl.git
+	url = git@github.com:XGC-Team/xgc2-fs150-sitl.git
 	branch = noetic
 [submodule "cerlab-uav-sim"]
 	path = cerlab-uav-sim
-	url = git@github.com:lxk36/xgc2-cerlab-uav-sim.git
+	url = git@github.com:XGC-Team/xgc2-cerlab-uav-sim.git
 	branch = noetic
 [submodule "scenes"]
 	path = scenes
-	url = git@github.com:lxk36/xgc2-gazebo-sim-scenes.git
+	url = git@github.com:XGC-Team/xgc2-gazebo-sim-scenes.git
 	branch = noetic
 [submodule "gazebo_sim_visualization"]
 	path = visualization
-	url = git@github.com:lxk36/xgc2-gazebo-sim-visualization.git
+	url = git@github.com:XGC-Team/xgc2-gazebo-sim-visualization.git
 	branch = noetic
 [submodule "gazebo_sim_vrpn_bridge"]
 	path = vrpn_bridge
-	url = git@github.com:lxk36/xgc2-gazebo-sim-vrpn-bridge.git
+	url = git@github.com:XGC-Team/xgc2-gazebo-sim-vrpn-bridge.git
 	branch = noetic
 [submodule "camera"]
 	path = camera
-	url = git@github.com:lxk36/xgc2-gazebo-sim-camera.git
+	url = git@github.com:XGC-Team/xgc2-gazebo-sim-camera.git
 	branch = main
 [submodule "mecanum"]
 	path = mecanum
-	url = git@github.com:lxk36/xgc2-gazebo-sim-mecanum.git
+	url = git@github.com:XGC-Team/xgc2-gazebo-sim-mecanum.git
 	branch = noetic
