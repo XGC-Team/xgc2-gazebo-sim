@@ -22,5 +22,9 @@ The `scenes` child owns two ROS packages:
 - `gazebo_sim_worlds` contains reusable worlds and model assets.
 - `xgc2_gazebo_scene` provides scene direction and obstacle control.
 
-The retired `gazebo_sim_manager` and `gazebo_sim_examples` packages are not
-part of the product or release graph. XGC2 owns process orchestration directly.
+`examples/` is a launch-only child (`gazebo_sim_examples`). It is not in CI,
+not in this release set, and not published to APT. Use it to start known
+demos by composing the independent robot and controller products.
+
+The retired `gazebo_sim_manager` package is not part of the product or
+release graph. XGC2 owns process orchestration directly.
