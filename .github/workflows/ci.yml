@@ -9,6 +9,9 @@ defaults:
   run:
     shell: bash
 
+permissions:
+  contents: read
+
 jobs:
   compliance:
     runs-on: ubuntu-latest
@@ -21,5 +24,7 @@ jobs:
       - name: Run metadata checks
         run: |
           set -euo pipefail
-          git diff --check HEAD
-          bash -n .xgc2/scripts/*.sh
+          test -e "${GITHUB_WORKSPACE}/.git"
+          git config --global --add safe.directory "${GITHUB_WORKSPACE}"
+          git -C "${GITHUB_WORKSPACE}" diff --check HEAD
+          bash -n "${GITHUB_WORKSPACE}"/.xgc2/scripts/*.sh
