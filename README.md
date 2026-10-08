@@ -7,7 +7,7 @@ Debian package.
 Each child repository owns and releases its own package. Consumers install
 only the products needed by the selected robot and workflow. The current
 catalog includes scenes, camera, mecanum, Scout, PX4 SITL, FS150 SITL,
-visualization, and the VRPN bridge.
+and the VRPN bridge. ROS visualization is not a child of this catalog.
 
 The historical packages `ros-noetic-xgc2-gazebo-sim` and
 `ros-noetic-xgc2-gazebo-sim-all` are frozen. They are not rebuilt, promoted,
@@ -17,10 +17,12 @@ or used as release gates.
 for selecting independent child products. Every child keeps its own `ci.yml`,
 `release.yml`, product metadata, tests, and APT payload.
 
-The `scenes` child owns two ROS packages:
+The `scenes` child owns these ROS packages:
 
 - `gazebo_sim_worlds` contains reusable worlds and model assets.
 - `xgc2_gazebo_scene` provides scene direction and obstacle control.
+- `xgc2_simple_lidar` publishes ideal world-frame XYZ observations.
+- `xgc2_gazebo_rendering` is the Gazebo Classic shadow-depth plugin. It installs `libxgc2_gazebo_rendering.so` on the ROS library path.
 
 `examples/` is a launch-only child (`gazebo_sim_examples`). It is not in CI,
 not in this release set, and not published to APT. Use it to start known

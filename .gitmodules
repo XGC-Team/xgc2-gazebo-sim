@@ -22,10 +22,6 @@
 	path = scenes
 	url = git@github.com:XGC-Team/xgc2-gazebo-sim-scenes.git
 	branch = noetic
-[submodule "gazebo_sim_visualization"]
-	path = visualization
-	url = git@github.com:XGC-Team/xgc2-gazebo-sim-visualization.git
-	branch = noetic
 [submodule "gazebo_sim_vrpn_bridge"]
 	path = vrpn_bridge
 	url = git@github.com:XGC-Team/xgc2-gazebo-sim-vrpn-bridge.git
